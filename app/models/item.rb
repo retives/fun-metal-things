@@ -3,8 +3,8 @@ class Item < ApplicationRecord
 
   
   has_many :taggings, dependent: :destroy
-  has_many :tags, through: :taggings [cite: 162]
-  has_many :reviews, dependent: :destroy [cite: 194]
+  has_many :tags, through: :taggings 
+  has_many :reviews, dependent: :destroy 
   has_many :order_items
 
   validates :name, presence: true

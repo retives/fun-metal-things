@@ -1,7 +1,12 @@
 class Payment < ApplicationRecord
   belongs_to :order
 
-  enum status: { pending: 'pending', completed: 'completed', failed: 'failed' }
+  # Статуси оплати з правильним синтаксисом Rails 8
+  enum :status, { 
+    pending: 'pending', 
+    completed: 'completed', 
+    failed: 'failed' 
+  }, default: :pending
 
   validates :total_price, presence: true, numericality: { greater_than: 0 }
   validates :transaction_reference, presence: true, uniqueness: true

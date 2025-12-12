@@ -1,0 +1,158 @@
+  [1m[35m (4.7ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY) /*application='FunMetalThings'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2025-12-12 12:02:34.170740', '2025-12-12 12:02:34.170743') RETURNING "key" /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+Migrating to EnableUuidExtension (20251211163140)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (3.7ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20251211163140') RETURNING "version" /*application='FunMetalThings'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='FunMetalThings'*/[0m
+Migrating to CreateItems (20251211163351)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='FunMetalThings'*/[0m
+  [1m[35m (5.1ms)[0m  [1m[35mCREATE TABLE "items" ("id" uuid NOT NULL PRIMARY KEY, "name" varchar, "description" text, "price" decimal, "quantity" integer, "is_available" boolean, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (1.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20251211163351') RETURNING "version" /*application='FunMetalThings'*/[0m
+  [1m[36mTRANSACTION (6.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='FunMetalThings'*/[0m
+Migrating to CreateUsers (20251211163534)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='FunMetalThings'*/[0m
+  [1m[35m (11.8ms)[0m  [1m[35mCREATE TABLE "users" ("id" uuid NOT NULL PRIMARY KEY, "role" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (1.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20251211163534') RETURNING "version" /*application='FunMetalThings'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='FunMetalThings'*/[0m
+Migrating to CreateOrders (20251211163647)
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+Migrating to CreateOrders (20251211163647)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='FunMetalThings'*/[0m
+  [1m[35m (8.3ms)[0m  [1m[35mCREATE TABLE "orders" ("id" uuid NOT NULL PRIMARY KEY, "total_price" decimal, "status" varchar, "user_id" uuid, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_f868b47f6a"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+) /*application='FunMetalThings'*/[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE INDEX "index_orders_on_user_id" ON "orders" ("user_id") /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20251211163647') RETURNING "version" /*application='FunMetalThings'*/[0m
+  [1m[36mTRANSACTION (3.7ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='FunMetalThings'*/[0m
+Migrating to CreatePayments (20251211163725)
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+Migrating to CreatePayments (20251211163725)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='FunMetalThings'*/[0m
+  [1m[35m (7.0ms)[0m  [1m[35mCREATE TABLE "payments" ("id" uuid NOT NULL PRIMARY KEY, "total_price" decimal, "status" varchar, "transaction_reference" varchar, "order_id" uuid, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_6af949464b"
+FOREIGN KEY ("order_id")
+  REFERENCES "orders" ("id")
+) /*application='FunMetalThings'*/[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE INDEX "index_payments_on_order_id" ON "payments" ("order_id") /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20251211163725') RETURNING "version" /*application='FunMetalThings'*/[0m
+  [1m[36mTRANSACTION (8.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='FunMetalThings'*/[0m
+Migrating to CreateReviews (20251211163758)
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+Migrating to CreateReviews (20251211163758)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='FunMetalThings'*/[0m
+  [1m[35m (8.2ms)[0m  [1m[35mCREATE TABLE "reviews" ("id" uuid NOT NULL PRIMARY KEY, "rating" integer, "details" text, "user_id" uuid, "item_id" uuid, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_74a66bd6c5"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+, CONSTRAINT "fk_rails_1b37fb5a2a"
+FOREIGN KEY ("item_id")
+  REFERENCES "items" ("id")
+) /*application='FunMetalThings'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "index_reviews_on_user_id" ON "reviews" ("user_id") /*application='FunMetalThings'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_reviews_on_item_id" ON "reviews" ("item_id") /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20251211163758') RETURNING "version" /*application='FunMetalThings'*/[0m
+  [1m[36mTRANSACTION (4.3ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='FunMetalThings'*/[0m
+Migrating to CreateTags (20251211163812)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='FunMetalThings'*/[0m
+  [1m[35m (6.3ms)[0m  [1m[35mCREATE TABLE "tags" ("id" uuid NOT NULL PRIMARY KEY, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (2.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20251211163812') RETURNING "version" /*application='FunMetalThings'*/[0m
+  [1m[36mTRANSACTION (7.9ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='FunMetalThings'*/[0m
+Migrating to CreateTaggings (20251211163858)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='FunMetalThings'*/[0m
+  [1m[35m (14.1ms)[0m  [1m[35mCREATE TABLE "taggings" ("id" uuid NOT NULL PRIMARY KEY, "item_id" uuid NOT NULL, "tag_id" uuid NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_e55d99b718"
+FOREIGN KEY ("item_id")
+  REFERENCES "items" ("id")
+, CONSTRAINT "fk_rails_9fcd2e236b"
+FOREIGN KEY ("tag_id")
+  REFERENCES "tags" ("id")
+) /*application='FunMetalThings'*/[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE INDEX "index_taggings_on_item_id" ON "taggings" ("item_id") /*application='FunMetalThings'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_taggings_on_tag_id" ON "taggings" ("tag_id") /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (1.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20251211163858') RETURNING "version" /*application='FunMetalThings'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='FunMetalThings'*/[0m
+Migrating to CreateActiveStorageTables (20251212105700)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='FunMetalThings'*/[0m
+  [1m[35m (3.9ms)[0m  [1m[35mCREATE TABLE "active_storage_blobs" ("id" uuid NOT NULL PRIMARY KEY, "key" varchar NOT NULL, "filename" varchar NOT NULL, "content_type" varchar, "metadata" text, "service_name" varchar NOT NULL, "byte_size" bigint NOT NULL, "checksum" varchar, "created_at" datetime(6) NOT NULL) /*application='FunMetalThings'*/[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_blobs_on_key" ON "active_storage_blobs" ("key") /*application='FunMetalThings'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "active_storage_attachments" ("id" uuid NOT NULL PRIMARY KEY, "name" varchar NOT NULL, "record_type" varchar NOT NULL, "record_id" uuid NOT NULL, "blob_id" uuid NOT NULL, "created_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_c3b3935057"
+FOREIGN KEY ("blob_id")
+  REFERENCES "active_storage_blobs" ("id")
+) /*application='FunMetalThings'*/[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE INDEX "index_active_storage_attachments_on_blob_id" ON "active_storage_attachments" ("blob_id") /*application='FunMetalThings'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_attachments_uniqueness" ON "active_storage_attachments" ("record_type", "record_id", "name", "blob_id") /*application='FunMetalThings'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "active_storage_variant_records" ("id" uuid NOT NULL PRIMARY KEY, "blob_id" uuid NOT NULL, "variation_digest" varchar NOT NULL, CONSTRAINT "fk_rails_993965df05"
+FOREIGN KEY ("blob_id")
+  REFERENCES "active_storage_blobs" ("id")
+) /*application='FunMetalThings'*/[0m
+  [1m[35m (2.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_variant_records_uniqueness" ON "active_storage_variant_records" ("blob_id", "variation_digest") /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20251212105700') RETURNING "version" /*application='FunMetalThings'*/[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='FunMetalThings'*/[0m
+Migrating to CreateProfilesAndAddresses (20251212110219)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='FunMetalThings'*/[0m
+  [1m[35m (2.2ms)[0m  [1m[35mCREATE TABLE "profiles" ("id" uuid NOT NULL PRIMARY KEY, "user_id" uuid NOT NULL, "first_name" varchar, "last_name" varchar, "phone_number" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_e424190865"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+) /*application='FunMetalThings'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_profiles_on_user_id" ON "profiles" ("user_id") /*application='FunMetalThings'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "addresses" ("id" uuid NOT NULL PRIMARY KEY, "profile_id" uuid NOT NULL, "city" varchar, "street" varchar, "house_number" varchar, "zip_code" varchar, "is_default" boolean DEFAULT 0, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_4833f54cf9"
+FOREIGN KEY ("profile_id")
+  REFERENCES "profiles" ("id")
+) /*application='FunMetalThings'*/[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE INDEX "index_addresses_on_profile_id" ON "addresses" ("profile_id") /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20251212110219') RETURNING "version" /*application='FunMetalThings'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='FunMetalThings'*/[0m
+Migrating to CreateOrderItems (20251212110241)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='FunMetalThings'*/[0m
+  [1m[35m (1.5ms)[0m  [1m[35mCREATE TABLE "order_items" ("id" uuid NOT NULL PRIMARY KEY, "order_id" uuid NOT NULL, "item_id" uuid NOT NULL, "quantity" integer DEFAULT 1 NOT NULL, "price_at_purchase" decimal(10,2) NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_e3cb28f071"
+FOREIGN KEY ("order_id")
+  REFERENCES "orders" ("id")
+, CONSTRAINT "fk_rails_3e402078fd"
+FOREIGN KEY ("item_id")
+  REFERENCES "items" ("id")
+) /*application='FunMetalThings'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_order_items_on_order_id" ON "order_items" ("order_id") /*application='FunMetalThings'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_order_items_on_item_id" ON "order_items" ("item_id") /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20251212110241') RETURNING "version" /*application='FunMetalThings'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='FunMetalThings'*/[0m
+Migrating to CreateCarts (20251212111221)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='FunMetalThings'*/[0m
+  [1m[35m (23.8ms)[0m  [1m[35mCREATE TABLE "carts" ("id" uuid NOT NULL PRIMARY KEY, "user_id" uuid, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_ea59a35211"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+) /*application='FunMetalThings'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "index_carts_on_user_id" ON "carts" ("user_id") /*application='FunMetalThings'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "cart_items" ("id" uuid NOT NULL PRIMARY KEY, "cart_id" uuid NOT NULL, "item_id" uuid NOT NULL, "quantity" integer DEFAULT 1, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_6cdb1f0139"
+FOREIGN KEY ("cart_id")
+  REFERENCES "carts" ("id")
+, CONSTRAINT "fk_rails_01e04d947d"
+FOREIGN KEY ("item_id")
+  REFERENCES "items" ("id")
+) /*application='FunMetalThings'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_cart_items_on_cart_id" ON "cart_items" ("cart_id") /*application='FunMetalThings'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_cart_items_on_item_id" ON "cart_items" ("item_id") /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20251212111221') RETURNING "version" /*application='FunMetalThings'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (2.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (3.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (2.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='FunMetalThings'*/[0m

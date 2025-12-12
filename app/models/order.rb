@@ -1,9 +1,15 @@
 class Order < ApplicationRecord
-    belongs_to :user [cite: 265]
-    has_many :order_items, dependent :detroy
-    has_one :payment, dependent :destroy [cite 186]
+  # Зв'язки
+  belongs_to :user 
+  has_many :order_items, dependent: :destroy
+  has_one :payment, dependent: :destroy 
 
-    enum status: {pending:'pending', processing:'processing', shipped:'shipped', selivered:'delivered'}
-    
-
+  # Статуси замовлення
+  enum :status, { 
+    pending: 'pending', 
+    processing: 'processing', 
+    shipped: 'shipped', 
+    delivered: 'delivered',
+    cancelled: 'cancelled'
+  }, default: :pending
 end

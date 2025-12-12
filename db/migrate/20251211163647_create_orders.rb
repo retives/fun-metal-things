@@ -4,7 +4,7 @@ class CreateOrders < ActiveRecord::Migration[7.0]
       t.decimal :total_price
       t.string :status
       t.datetime :created_at
-
+      t.references :user, type: :uuid, foreign_key: true
       t.timestamps
     end
   end

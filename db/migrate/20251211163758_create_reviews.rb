@@ -4,6 +4,8 @@ class CreateReviews < ActiveRecord::Migration[7.0]
       t.integer :rating
       t.text :details
       t.datetime :created_at
+      t.references :user, type: :uuid, foreign_key: true
+      t.references :item, type: :uuid, foreign_key: true
 
       t.timestamps
     end

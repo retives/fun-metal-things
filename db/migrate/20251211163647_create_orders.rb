@@ -1,0 +1,11 @@
+class CreateOrders < ActiveRecord::Migration[7.0]
+  def change
+    create_table :orders, id: :uuid do |t|
+      t.decimal :total_price
+      t.string :status
+      t.datetime :created_at
+
+      t.timestamps
+    end
+  end
+end

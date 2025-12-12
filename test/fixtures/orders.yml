@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  total_price: 9.99
+  status: MyString
+  created_at: 2025-12-11 18:36:47
+
+two:
+  total_price: 9.99
+  status: MyString
+  created_at: 2025-12-11 18:36:47

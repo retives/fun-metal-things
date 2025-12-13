@@ -28,9 +28,12 @@ gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
 
-gem 'devise'
-gem 'bootstrap'
-gem 'image_processing'
+gem "devise"
+gem "bootstrap"
+gem "image_processing"
+gem "dartsass-rails"
+gem "postgresql"
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
@@ -64,4 +67,3 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
-

@@ -1,20 +1,24 @@
 class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_one :profile, dependent: :destroy [cite: 263]
+  has_one :profile, dependent: :destroy
   has_one :cart, dependent: :destroy
-  has_many :orders, dependent: :destroy [cite: 265]
-  has_many :reviews, dependent: :destroy [cite: 191]
+  has_many :orders, dependent: :destroy
+  has_many :reviews, dependent: :destroy
 
-  enum role: { client: 'client', admin: 'admin' }
+  enum :role, { client: "client", admin: "admin" }, default: "client"
 
   after_create :create_user_dependencies
 
   private
 
   def create_user_dependencies
-    create_profile [cite: 263]
+    create_profile
     create_cart
   end
 end

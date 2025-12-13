@@ -23,6 +23,7 @@ module FunMetalThings
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.active_record.schema_format = :sql
     config.generators do |g|
     g.orm :active_record, primary_key_type: :uuid
     end

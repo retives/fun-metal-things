@@ -1,0 +1,46 @@
+<div class="content-wrapper" style="max-width: 600px; margin: 0 auto;">
+  <div class="profile-header" style="margin-bottom: 30px; border-bottom: 2px solid var(--primary);">
+    <h1>Налаштування профілю</h1>
+  </div>
+
+  <div class="item-card" style="padding: 30px;">
+    <%= form_with(model: @profile, url: profile_path, method: :patch, local: true) do |f| %>
+      
+      <%# Виведення помилок валідації %>
+      <% if @profile.errors.any? %>
+        <div style="background: rgba(207, 109, 55, 0.1); border: 1px solid var(--primary); padding: 15px; border-radius: 8px; margin-bottom: 20px; color: #ff6b6b;">
+          <h4 style="margin-top: 0;">Виправте наступні помилки:</h4>
+          <ul>
+            <% @profile.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="form-group" style="margin-bottom: 20px;">
+        <%= f.label :first_name, "Ім'я", style: "display: block; margin-bottom: 8px; color: var(--primary);" %>
+        <%= f.text_field :first_name, class: "form-control", style: "width: 100%; background: #2b2724; border: 1px solid var(--muted); color: white; padding: 12px; border-radius: 6px;" %>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 20px;">
+        <%= f.label :last_name, "Прізвище", style: "display: block; margin-bottom: 8px; color: var(--primary);" %>
+        <%= f.text_field :last_name, class: "form-control", style: "width: 100%; background: #2b2724; border: 1px solid var(--muted); color: white; padding: 12px; border-radius: 6px;" %>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 30px;">
+        <%= f.label :phone_number, "Номер телефону", style: "display: block; margin-bottom: 8px; color: var(--primary);" %>
+        <%= f.text_field :phone_number, placeholder: "+380...", class: "form-control", style: "width: 100%; background: #2b2724; border: 1px solid var(--muted); color: white; padding: 12px; border-radius: 6px;" %>
+      </div>
+
+      <div style="display: flex; gap: 15px;">
+        <%= f.submit "Зберегти зміни", class: "btn-primary", style: "flex: 2;" %>
+        <%= link_to "Скасувати", profile_path, class: "btn-outline", style: "flex: 1; text-align: center; display: flex; align-items: center; justify-content: center;" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div style="margin-top: 20px; text-align: center;">
+    <%= link_to "Змінити email або пароль (Devise)", edit_user_registration_path, style: "color: var(--muted); font-size: 0.8rem;" %>
+  </div>
+</div>

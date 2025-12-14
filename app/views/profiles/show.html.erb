@@ -1,0 +1,56 @@
+<div class="content-wrapper">
+  <div class="profile-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--dark-brown); padding-bottom: 20px;">
+    <h1>Мій профіль 🎸</h1>
+    <%= link_to "Редагувати дані", edit_profile_path, class: "btn-outline" %>
+  </div>
+
+  <div class="profile-grid" style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;">
+    
+    <aside class="profile-info-card" style="background: #2b2724; padding: 25px; border-radius: 12px; border: 1px solid var(--muted);">
+      <h3 style="color: var(--primary); margin-top: 0;">Контактна інформація</h3>
+      <p><strong>Email:</strong> <%= current_user.email %></p>
+      <p><strong>Ім'я:</strong> <%= @profile.first_name.presence || "Не вказано" %></p>
+      <p><strong>Прізвище:</strong> <%= @profile.last_name.presence || "Не вказано" %></p>
+      <p><strong>Телефон:</strong> <%= @profile.phone_number.presence || "Не вказано" %></p>
+      <p><strong>Роль:</strong> <span class="badge"><%= current_user.role.capitalize %></span></p> 
+      
+      <div style="margin-top: 30px; border-top: 1px solid var(--dark-brown); padding-top: 20px;">
+        <%= link_to "Змінити пароль", edit_user_registration_path, style: "color: var(--primary); font-size: 0.9rem;" %> 
+      </div>
+    </aside>
+
+    <section class="profile-activity">
+      <div style="margin-bottom: 40px;">
+        <h3 style="border-left: 4px solid var(--primary); padding-left: 15px;">Мої замовлення</h3>
+        <% if @orders.any? %>
+          <div class="orders-list">
+            <% @orders.each do |order| %>
+              <div style="background: #2b2724; margin-bottom: 10px; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between;">
+                <span>Замовлення №<%= order.id.to_s.first(8) %></span>
+                <span style="color: var(--primary);"><%= number_to_currency(order.total_amount, unit: "₴") %></span>
+                <span class="status-tag"><%= order.status %></span> 
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p style="color: var(--muted);">Ви ще не робили замовлень. </p>
+        <% end %>
+      </div>
+
+      <div>
+        <h3 style="border-left: 4px solid var(--primary); padding-left: 15px;">Мої відгуки</h3>
+        <% if @reviews.any? %>
+          <% @reviews.each do |review| %>
+            <div style="background: #2b2724; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+              <strong><%= review.item.name %></strong>
+              <span style="color: var(--primary); float: right;"><%= "★" * review.rating %></span>
+              <p style="margin-top: 10px; font-style: italic;"><%= review.comment %></p>
+            </div>
+          <% end %>
+        <% else %>
+          <p style="color: var(--muted);">Ви ще не залишили жодного відгуку. </p>
+        <% end %>
+      </div>
+    </section>
+  </div>
+</div>

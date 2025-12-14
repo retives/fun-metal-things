@@ -33,7 +33,7 @@ gem "bootstrap"
 gem "image_processing"
 gem "dartsass-rails"
 gem "postgresql"
-
+gem "ransack"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 

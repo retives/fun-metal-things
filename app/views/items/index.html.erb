@@ -1,2 +1,14 @@
-<h1>Items#index</h1>
-<p>Find me in app/views/items/index.html.erb</p>
+<h1>Каталог інструментів FunMetalThings</h1>
+
+<div class="items-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+  <% @items.each do |item| %>
+    <div class="item-card" style="border: 1px solid #444; padding: 15px; border-radius: 8px; background: #1a1a1a; color: white;">
+      <h2><%= item.name %></h2>
+      <p><%= truncate(item.description, length: 100) %></p>
+      <p><strong>Ціна:</strong> <%= number_to_currency(item.price, unit: "₴", format: "%n %u") %></p>
+      <p>В наявності: <%= item.quantity %> шт.</p>
+      
+      <%= link_to "Детальніше", item_path(item), class: "btn" %>
+    </div>
+  <% end %>
+</div>

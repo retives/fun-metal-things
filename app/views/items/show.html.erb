@@ -1,2 +1,68 @@
-<h1>Items#show</h1>
-<p>Find me in app/views/items/show.html.erb</p>
+<div class="container" style="max-width: 900px; margin: 0 auto; padding: 20px; color: #eee;">
+  <%= link_to '← Назад до каталогу', items_path, style: "color: #ff4500; text-decoration: none;" %>
+
+  <div class="item-details" style="display: flex; gap: 40px; margin-top: 30px; background: #111; padding: 30px; border-radius: 12px; border: 1px solid #333;">
+    
+    <%# Секція зображення (ActiveStorage) %>
+    <!--
+    <div class="item-image" style="flex: 1; background: #222; min-height: 300px; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+       <%# if @item.images.attached? %>
+        <%#= image_tag @item.images.first, style: "max-width: 100%; border-radius: 4px;" %>
+      <%# else %>
+        <span style="color: #666;">Зображення відсутнє</span>
+      <%# end %>  
+    </div>
+    -->
+    
+    <%# Інформаційна секція %>
+    <div class="item-info" style="flex: 1;">
+      <h1 style="margin-top: 0; color: #fff;"><%= @item.name %></h1>
+      
+      <%# Відображення тегів (Вимога 3.1.4) %>
+      <div class="tags" style="margin-bottom: 15px;">
+        <% @item.tags.each do |tag| %>
+          <span style="background: #ff4500; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin-right: 5px;">
+            #<%= tag.name %>
+          </span>
+        <% end %>
+      </div>
+
+      <p style="font-size: 1.1em; line-height: 1.6; color: #ccc;">
+        <%= @item.description %>
+      </p>
+
+      <div class="purchase-zone" style="margin-top: 40px; border-top: 1px solid #333; padding-top: 20px;">
+        <h2 style="color: #ff4500;"><%= number_to_currency(@item.price, unit: "₴", format: "%n %u") %></h2>
+        
+        <p>Статус: 
+          <% if @item.is_available %>
+            <span style="color: #00ff00;">● В наявності (<%= @item.quantity %> шт.)</span>
+          <% else %>
+            <span style="color: #ff0000;">● Тимчасово відсутній</span>
+          <% end %>
+        </p>
+
+        <% if @item.is_available %>
+          <%= button_to "Додати у кошик", "#", class: "btn-add-to-cart", 
+              style: "background: #ff4500; color: white; border: none; padding: 12px 25px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%;" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <%# Секція відгуків (Вимога 3.1.8) %>
+  <div class="reviews-section" style="margin-top: 50px;">
+    <h3>Відгуки покупців</h3>
+    <% if @item.reviews.any? %>
+      <% @item.reviews.each do |review| %>
+        <div style="border-bottom: 1px solid #333; padding: 15px 0;">
+          <strong><%= review.user.email %></strong> 
+          <span style="color: #ff4500;">★ <%= review.rating %></span>
+          <p><%= review.comment %></p>
+        </div>
+      <% end %>
+    <% else %>
+      <p style="color: #666;">На цей товар ще немає відгуків. Будьте першим!</p>
+    <% end %>
+  </div>
+</div>

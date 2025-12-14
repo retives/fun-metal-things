@@ -1,13 +1,53 @@
-<div class="container">
-  <h1>Каталог інструментів FunMetalThings</h1>
-  <div class="items-grid">
-    <% @items.each do |item| %>
-      <div class="item-card">
-        <h3><%= item.name %></h3>
-        <p><%= truncate(item.description, length: 80) %></p>
-        <div class="price"><%= number_to_currency(item.price, unit: "₴", format: "%n %u") %></div>
-        <%= link_to "Детальніше", item_path(item), class: "btn-primary", style: "text-align: center; margin-top: auto; text-decoration: none; padding-top: 10px;" %>
+<div class="content-wrapper" style="display: grid; grid-template-columns: 250px 1fr; gap: 30px;">
+  
+  <%# ЛІВА ПАНЕЛЬ: Фільтрація та Сортування %>
+  <aside class="filter-sidebar" style="background: #2b2724; padding: 20px; border-radius: 8px; border: 1px solid var(--dark-brown); height: fit-content;">
+    <%= search_form_for @q, url: items_path do |f| %>
+      <h3 style="color: var(--primary); margin-top: 0;">Сортувати</h3>
+      <div style="margin-bottom: 20px;">
+        <%= f.select :s, 
+            { 'Новинки' => 'created_at desc', 'Ціна: від дешевих' => 'price asc', 'Ціна: від дорогих' => 'price desc' }, 
+            {}, { onchange: 'this.form.submit();', style: "width: 100%; background: #332f2c; color: white; padding: 8px; border: 1px solid var(--muted);" } %>
       </div>
+
+      <h3 style="color: var(--primary);">Ціна</h3>
+      <div style="display: flex; gap: 5px; margin-bottom: 20px;">
+        <%= f.number_field :price_gteq, placeholder: "Від", style: "width: 50%; background: #332f2c; color: white; border: 1px solid var(--muted); padding: 5px;" %>
+        <%= f.number_field :price_lteq, placeholder: "До", style: "width: 50%; background: #332f2c; color: white; border: 1px solid var(--muted); padding: 5px;" %>
+      </div>
+
+      <h3 style="color: var(--primary);">Теги</h3>
+      <div style="max-height: 200px; overflow-y: auto; margin-bottom: 20px;">
+        <% Tag.all.each do |tag| %>
+          <label style="display: block; margin-bottom: 5px; font-size: 0.9rem;">
+            <%= check_box_tag "q[tags_id_in][]", tag.id, (params[:q][:tags_id_in].include?(tag.id) if params[:q] && params[:q][:tags_id_in]) %>
+            <%= tag.name %>
+          </label>
+        <% end %>
+      </div>
+
+      <%= f.submit "Застосувати", class: "btn-primary", style: "width: 100%;" %>
+      <%= link_to "Скинути", items_path, style: "display: block; text-align: center; margin-top: 10px; color: var(--muted); font-size: 0.8rem;" %>
     <% end %>
-  </div>
+  </aside>
+
+  <section>
+    <div style="margin-bottom: 30px;">
+      <%= search_form_for @q, url: items_path do |f| %>
+        <div style="display: flex; gap: 10px;">
+          <%= f.search_field :name_cont, placeholder: "Пошук інструментів (напр. Gibson, Marshall...)", 
+              style: "flex: 1; padding: 15px; background: #2b2724; border: 2px solid var(--primary); color: white; border-radius: 6px; font-size: 1.1rem;" %>
+          <%= f.submit "ШУКАТИ 🔍", class: "btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="items-grid">
+      <% if @items.any? %>
+        <%= render @items %> 
+      <% else %>
+        <p style="text-align: center; padding: 50px;">Нічого не знайдено за вашим запитом. 🤘</p>
+      <% end %>
+    </div>
+  </section>
 </div>

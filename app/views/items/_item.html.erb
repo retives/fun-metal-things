@@ -1,0 +1,21 @@
+<%# app/views/items/_item.html.erb %>
+<div class="item-card">
+  <%# Example of commenting multi-line sections in ERB: Use <%# for ERB code and <!-- --> for HTML %>
+  <!--
+  <%# if item.images.attached? %>
+    <%#= image_tag item.images.first, class: "item-thumb" %>
+  <%# else %>
+    <div class="item-placeholder">🎸</div>
+  <%# end %>
+  -->
+
+  <h3><%= item.name %></h3>
+  <div class="price"><%= number_to_currency(item.price, unit: "₴", format: "%n %u") %></div>
+  
+  <div class="card-actions">
+    <%= link_to "ДЕТАЛЬНІШЕ", item_path(item), class: "nav-link", style: "color: var(--primary);" %>
+    <% if item.is_available %>
+      <%= button_to "У КОШИК", cart_items_path(item_id: item.id), method: :post, class: "btn-primary", style: "padding: 8px 15px; font-size: 0.8rem;" %>
+    <% end %>
+  </div>
+</div>

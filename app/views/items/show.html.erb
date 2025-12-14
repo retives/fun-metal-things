@@ -65,20 +65,54 @@
   </div>
 
   <%# Секція відгуків (Вимога 3.1.8) %>
-  <div style="margin-top: 50px; border-top: 1px solid var(--dark-brown); padding-top: 30px;">
-    <h2 style="color: var(--primary);">Відгуки фанатів</h2>
+<%# Секція відгуків %>
+<div class="reviews-container" style="margin-top: 50px; border-top: 1px solid var(--dark-brown); padding-top: 30px;">
+  <h2 style="color: var(--primary); margin-bottom: 20px;">ВІДГУКИ ТА ВРАЖЕННЯ 🎸</h2>
+
+  <% if user_signed_in? %>
+    <%# Форма створення відгуку %>
+    <div class="item-card" style="padding: 20px; margin-bottom: 40px; background: #2b2724;">
+      <h4 style="margin-top: 0;">Залишити свій відгук:</h4>
+      <%= form_with(model: [ @item, @item.reviews.build ], local: true) do |f| %>
+        
+        <div style="margin-bottom: 15px;">
+          <%= f.label :rating, "Ваша оцінка:", style: "display: block; color: var(--primary); margin-bottom: 5px;" %>
+          <%= f.select :rating, (1..5).to_a.reverse.map { |n| ["#{n} ★", n] }, {}, 
+              { style: "background: #332f2c; color: white; border: 1px solid var(--muted); padding: 8px; border-radius: 4px; width: 100px;" } %>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+          <%= f.text_area :comment, placeholder: "Напишіть ваші враження від інструменту...", 
+              style: "width: 100%; height: 100px; background: #332f2c; color: white; border: 1px solid var(--muted); padding: 12px; border-radius: 6px; resize: vertical;" %>
+        </div>
+
+        <%= f.submit "ОПУБЛІКУВАТИ", class: "btn-primary", style: "padding: 10px 25px;" %>
+      <% end %>
+    </div>
+  <% else %>
+    <p style="background: rgba(207, 109, 55, 0.1); padding: 15px; border-radius: 8px; border: 1px dashed var(--primary); text-align: center;">
+      Тільки авторизовані рок-фанати можуть залишати відгуки. <%= link_to "Увійти", new_user_session_path, style: "color: var(--primary); font-weight: bold;" %>
+    </p>
+  <% end %>
+
+  <%# Список існуючих відгуків %>
+  <div class="reviews-list">
     <% if @item.reviews.any? %>
-      <% @item.reviews.each do |review| %>
-        <div style="background: #2b2724; padding: 20px; border-radius: 8px; margin-bottom: 15px;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-            <strong><%= review.user.email %></strong>
-            <span style="color: var(--primary);"><%= "★" * review.rating %></span>
+      <% @item.reviews.order(created_at: :desc).each do |review| %>
+        <% if review.persisted? %>
+          <div style="background: #2b2724; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--primary);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <strong><%= review.user.email.split('@').first %></strong>
+              <span style="color: var(--primary); font-weight: bold;"><%= "★" * review.rating %></span>
+            </div>
+            <p style="margin: 0; color: #ccc;"><%= review.details %></p>
+            <small style="color: var(--muted); display: block; margin-top: 10px;">Опубліковано: <%= review.created_at.strftime("%d.%m.%Y") %></small>
           </div>
-          <p style="margin: 0;"><%= review.comment %></p>
-        </div> 
+        <% end %>
       <% end %>
     <% else %>
-      <p style="color: var(--muted);">Ще немає відгуків. Станьте першим, хто оцінить цей інструмент!</p>
+      <p style="color: var(--muted); text-align: center;">На цей товар ще немає відгуків. Станьте першим!</p>
     <% end %>
   </div>
+</div>
 </div>

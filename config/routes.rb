@@ -2,8 +2,9 @@ Rails.application.routes.draw do
   get "items/index"
   get "items/show"
   devise_for :users
-  resources :items, only: [ :index, :show ]
-
+  resources :items, only: [ :index, :show ] do
+    resources :reviews, outline: [ :create ]
+  end
   resources :cart_items, only: [ :create, :destroy, :update ]
   resource :cart, only: [ :show ]
 

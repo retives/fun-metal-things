@@ -1,0 +1,53 @@
+<div class="content-wrapper" style="max-width: 500px; margin: 0 auto;">
+  <div class="profile-header" style="margin-bottom: 30px; border-bottom: 2px solid var(--primary);">
+    <h1>Налаштування входу 🛡️</h1>
+  </div>
+
+  <div class="item-card" style="padding: 30px;">
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <div class="form-group" style="margin-bottom: 20px;">
+        <%= f.label :email, "Електронна пошта", style: "display: block; margin-bottom: 8px; color: var(--primary);" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", style: "width: 100%; background: #2b2724; border: 1px solid var(--muted); color: white; padding: 12px; border-radius: 6px;" %>
+      </div>
+
+      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+        <div style="color: var(--muted); font-size: 0.8rem; margin-bottom: 10px;">
+          Очікується підтвердження для: <%= resource.unconfirmed_email %>
+        </div>
+      <% end %>
+
+      <div class="form-group" style="margin-bottom: 20px;">
+        <%= f.label :password, "Новий пароль", style: "display: block; margin-bottom: 5px; color: var(--primary);" %>
+        <i style="font-size: 0.7rem; color: var(--muted); display: block; margin-bottom: 8px;">(залиште порожнім, якщо не хочете змінювати)</i>
+        <%= f.password_field :password, autocomplete: "new-password", class: "form-control", style: "width: 100%; background: #2b2724; border: 1px solid var(--muted); color: white; padding: 12px; border-radius: 6px;" %>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 20px;">
+        <%= f.label :password_confirmation, "Підтвердження нового пароля", style: "display: block; margin-bottom: 8px; color: var(--primary);" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", style: "width: 100%; background: #2b2724; border: 1px solid var(--muted); color: white; padding: 12px; border-radius: 6px;" %>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 30px; border-top: 1px solid var(--dark-brown); padding-top: 20px;">
+        <%= f.label :current_password, "Поточний пароль", style: "display: block; margin-bottom: 5px; color: var(--primary);" %>
+        <i style="font-size: 0.7rem; color: var(--muted); display: block; margin-bottom: 8px;">(нам потрібен ваш пароль, щоб підтвердити зміни)</i>
+        <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control", style: "width: 100%; background: #2b2724; border: 2px solid var(--primary); color: white; padding: 12px; border-radius: 6px;" %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit "Оновити акаунт", class: "btn-primary", style: "width: 100%;" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div style="margin-top: 40px; border: 1px dashed #ff4500; padding: 20px; border-radius: 8px; text-align: center;">
+    <h3 style="color: #ff4500; margin-top: 0;">Видалити акаунт</h3>
+    <p style="font-size: 0.8rem; color: var(--muted);">Це дія незворотна. Всі ваші замовлення будуть анонімізовані.</p>
+    <%= button_to "Видалити мій акаунт", registration_path(resource_name), data: { confirm: "Ви впевнені?", turbo_confirm: "Ви впевнені?" }, method: :delete, class: "btn-outline", style: "color: #ff4500; border-color: #ff4500;" %>
+  </div>
+
+  <div style="margin-top: 20px; text-align: center;">
+    <%= link_to "← Назад до профілю", profile_path, style: "color: var(--muted);" %>
+  </div>
+</div>

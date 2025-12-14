@@ -3,8 +3,11 @@ Rails.application.routes.draw do
   get "items/show"
   devise_for :users
   resources :items, only: [ :index, :show ]
-  resources :cart_items, only: [ :create, :destroy ]
-  resource :cart, medical: :show
+
+  resources :cart_items, only: [ :create, :destroy, :update ]
+  resource :cart, only: [ :show ]
+
+  resource :profile, only: [ :show, :edit, :update ]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

@@ -1,4 +1,11 @@
-<%# app/views/orders/show.html.erb %>
+
+<% if @order.nil? %>
+  <p>Завантаження даних замовлення... Якщо сторінка не оновилась, перейдіть до профілю.</p>
+<% else %>
+  <div class="item-card">
+    <h1 style="color: var(--primary);">ЧЕК №<%= @order.id.to_s.first(8).upcase %></h1>
+  </div>
+<% end %>
 <div class="content-wrapper" style="max-width: 800px; margin: 0 auto; padding: 50px 20px;">
   <div class="item-card" style="padding: 40px; border: 3px solid var(--primary); background: #1a1a1a; position: relative;">
     

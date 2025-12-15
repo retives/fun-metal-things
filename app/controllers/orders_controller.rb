@@ -37,7 +37,7 @@ class OrdersController < ApplicationController
 
         @cart.cart_items.destroy_all
 
-        redirect_to order_path(@order), notice: "Замовлення успішно оформлено! Готуйте підсилювачі! 🎸"
+        redirect_to payment_order_path(@order)
       else
         render :new, status: :unprocessable_entity
       end
@@ -52,39 +52,31 @@ class OrdersController < ApplicationController
     params.require(:order).permit(:full_name, :address, :phone, :payment_method)
   end
 
-def payment
-  @order = Order.find(params[:id])
-  @cart = current_user.cart
-  if @order.nil?
-    redirect_to profile_path, alert: "Замовлення не знайдено або ви не маєте до нього доступу."
-    return
+  def payment
+    @order = current_user.orders.find_by(id: params[:id])
+    if @order && @order.order_items.any?
+      begin
+        @session = Stripe::Checkout::Session.create({
+          payment_method_types: [ "card" ],
+          line_items: @order.order_items.map { |oi|
+            {
+              price_data: {
+                currency: "uah",
+                product_data: { name: oi.item.name },
+                unit_amount: (oi.price_at_purchase.to_f * 100).to_i
+              },
+              quantity: oi.quantity
+            }
+          },
+          mode: "payment",
+          success_url: confirm_payment_order_url(@order) + "?session_id={CHECKOUT_SESSION_ID}",
+          cancel_url: payment_order_url(@order)
+        })
+      rescue Stripe::StripeError => e
+        @debug_info[:stripe_error] = e.message
+      end
+    end
   end
-  if @order.paid?
-    redirect_to order_path(@order), notice: "Це замовлення вже оплачено! 🤘"
-    return
-  end
-  # Створюємо сесію Stripe
-  @session = Stripe::Checkout::Session.create({
-    customer_email: current_user.email,
-    payment_method_types: [ "card" ],
-    line_items: @cart.cart_items.map do |ci|
-      {
-        price_data: {
-          currency: "uah",
-          product_data: { name: ci.item.name },
-          unit_amount: (ci.item.price * 100).to_i
-        },
-        quantity: ci.quantity
-      }
-    end,
-    mode: "payment",
-    success_url: confirm_payment_order_url(@order) + "?session_id={CHECKOUT_SESSION_ID}",
-    cancel_url: cart_url
-  })
-
-
-  @order.update(stripe_session_id: @session.id)
-end
 
   def confirm_payment
     @order = Order.find(params[:id])
@@ -105,7 +97,10 @@ end
   end
 
   def show
-    @order = current_user.orders.find(params[:id])
-    @order_items = @order.order_items.includes(:item)
+      @order = current_user.orders.find(params[:id])
+
+      @order_items = @order.order_items.includes(:item)
+  rescue ActiveRecord::RecordNotFound
+    redirect_to profile_path, alert: "Замовлення не знайдено."
   end
 end

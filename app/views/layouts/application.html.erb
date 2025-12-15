@@ -29,6 +29,11 @@
         </div>
         <div class="user-actions">
           <% if user_signed_in? %>
+            <% if current_user.admin? %>
+              <%= link_to "АДМІН-ПАНЕЛЬ", admin_root_path, class: "admin-link", style: "color: var(--primary); font-weight: bold;" %>
+            <% end %>
+          <% end %>
+          <% if user_signed_in? %>
             <%= link_to cart_path, class: "cart-btn" do %>
               <span class="icon">🛒</span>
               <span class="badge"><%= current_cart.cart_items.sum(:quantity) %></span>

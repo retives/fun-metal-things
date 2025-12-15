@@ -15,6 +15,10 @@ class User < ApplicationRecord
 
   after_create :create_user_dependencies
 
+  def admin?
+    role == "admin"
+  end
+
   private
 
   def create_user_dependencies

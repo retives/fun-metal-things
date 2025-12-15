@@ -35,6 +35,7 @@ gem "dartsass-rails"
 gem "postgresql"
 gem "ransack"
 gem "stripe"
+gem "dotenv-rails"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 

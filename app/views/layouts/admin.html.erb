@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FunMetalThings | Admin Panel</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <style>
+      :root {
+        --admin-sidebar: #252220;
+      }
+      body { display: flex; min-height: 100vh; background-color: #1a1a1a; color: white; margin: 0; }
+      .admin-sidebar { 
+        width: 260px; background: var(--admin-sidebar); 
+        border-right: 2px solid var(--primary); padding: 20px;
+      }
+      .admin-main { flex: 1; padding: 40px; overflow-y: auto; }
+      .admin-nav-link {
+        display: block; padding: 12px; color: #ccc; text-decoration: none;
+        border-radius: 6px; margin-bottom: 5px; transition: 0.3s;
+      }
+      .admin-nav-link:hover, .admin-nav-link.active {
+        background: var(--primary); color: white;
+      }
+    </style>
+  </head>
+
+  <body>
+    <aside class="admin-sidebar">
+      <h2 style="color: var(--primary); margin-bottom: 30px;">🤘 ADMIN</h2>
+      <nav>
+        <%= link_to "Головна (Stats)", admin_root_path, class: "admin-nav-link" %>
+        <%= link_to "Товари (Inventory)", admin_items_path, class: "admin-nav-link" %>
+        <%= link_to "Замовлення (Sales)", admin_orders_path, class: "admin-nav-link" %>
+        <hr style="border: 0; border-top: 1px solid #444; margin: 20px 0;">
+        <%= link_to "Повернутись на сайт", root_path, class: "admin-nav-link" %>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <% flash.each do |type, msg| %>
+        <div class="alert alert-<%= type %>" style="padding: 15px; margin-bottom: 20px; border-radius: 8px; background: #333; border: 1px solid var(--primary);">
+          <%= msg %>
+        </div>
+      <% end %>
+
+      <%= yield %>
+    </main>
+  </body>
+</html>

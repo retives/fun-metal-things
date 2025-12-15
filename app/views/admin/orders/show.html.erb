@@ -1,0 +1,63 @@
+<%# app/views/admin/orders/show.html.erb %>
+
+<div style="margin-bottom: 20px;">
+  <%= link_to "← Назад до списку замовлень", admin_orders_path, style: "color: var(--muted); text-decoration: none;" %>
+</div>
+
+<div class="checkout-layout" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; align-items: start;">
+  
+  <%# Ліва частина: Деталі замовлення %>
+  <div class="item-card" style="padding: 30px; background: #2b2724; border: 1px solid var(--dark-brown);">
+    <h1 style="color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--primary); padding-bottom: 10px;">
+      ЗАМОВЛЕННЯ №<%= @order.id.to_s.first(8).upcase %>
+    </h1>
+
+    <div style="margin: 25px 0;">
+      <h3 style="color: var(--primary);">Склад замовлення:</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+        <thead>
+          <tr style="text-align: left; border-bottom: 1px solid #444;">
+            <th style="padding: 10px;">Товар</th>
+            <th style="padding: 10px;">Кількість</th>
+            <th style="padding: 10px;">Ціна (за од.)</th>
+            <th style="padding: 10px;">Сума</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @order_items.each do |oi| %>
+            <tr style="border-bottom: 1px solid #333;">
+              <td style="padding: 10px;"><%= oi.item.name %></td>
+              <td style="padding: 10px;"><%= oi.quantity %></td>
+              <td style="padding: 10px;"><%= number_to_currency(oi.price_at_purchase, unit: "₴") %></td>
+              <td style="padding: 10px; font-weight: bold;"><%= number_to_currency(oi.price_at_purchase * oi.quantity, unit: "₴") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div style="text-align: right; margin-top: 20px; font-size: 1.5rem; font-weight: bold;">
+        РАЗОМ: <span style="color: var(--primary);"><%= number_to_currency(@order.total_price, unit: "₴") %></span>
+      </div>
+    </div>
+  </div>
+
+  <%# Права частина: Дані клієнта та Керування %>
+  <aside>
+    <div class="item-card" style="padding: 25px; background: #332f2c; margin-bottom: 20px;">
+      <h3 style="color: var(--primary); margin-top: 0;">Дані для доставки:</h3>
+      <p><strong>Клієнт:</strong> <%= @order.full_name %></p>
+      <p><strong>Телефон:</strong> <%= @order.phone %></p>
+      <p><strong>Адреса:</strong> <%= @order.address %></p>
+      <p><strong>Email:</strong> <%= @order.user.email %></p>
+    </div>
+
+    <div class="item-card" style="padding: 25 : 25px; border: 2px solid var(--primary);">
+      <h3 style="color: var(--primary); margin-top: 0;">Змінити статус:</h3>
+      <%= form_with(model: [:admin, @order], local: true, method: :patch) do |f| %>
+        <%= f.select :status, Order.statuses.keys.map { |s| [s.upcase, s] }, {}, 
+            { class: "form-control", style: "width: 100%; padding: 10px; background: #1a1a1a; color: white; margin-bottom: 15px;" } %>
+        <%= f.submit "ОНОВИТИ СТАТУС ⚡", class: "btn-primary", style: "width: 100%;" %>
+      <% end %>
+    </div>
+  </aside>
+
+</div>

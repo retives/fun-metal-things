@@ -2,20 +2,30 @@ Rails.application.routes.draw do
   get "items/index"
   get "items/show"
   devise_for :users
-
+  # Items routes + reviews
   resources :items, only: [ :index, :show ] do
     resources :reviews, outline: [ :create ]
   end
+  # Cart items routes
   resources :cart_items, only: [ :create, :destroy, :update ]
+  # Cart routes
   resource :cart, only: [ :show ]
-  resources :orders, only: [ :new, :create, :show, :index ]
+  # Profile routes
   resource :profile, only: [ :show, :edit, :update ]
 
+  # Order routes + payment
+  resources :orders, only: [ :new, :create, :show, :index ]
   resources :orders, only: [ :new, :create, :show, :index ] do
     member do
-      get :payment           # Створює payment_order_path(@order)
-      patch :confirm_payment  # Створює confirm_payment_order_path(@order)
+      get :payment
+      patch :confirm_payment
     end
+  end
+  # Admin routes
+  namespace :admin do
+    root to: "dashboard#index"
+    resources :items
+    resources :orders, only: [ :index, :show, :update ] # Додано :update
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

@@ -1,0 +1,41 @@
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+  <h1 style="color: var(--primary); margin: 0;">КЕРУВАННЯ ЗАМОВЛЕННЯМИ 📦</h1>
+</div>
+
+<div class="item-card" style="padding: 0; overflow: hidden; background: #2b2724; border: 1px solid var(--dark-brown);">
+  <table style="width: 100%; border-collapse: collapse; color: #fff; text-align: left;">
+    <thead>
+      <tr style="background: #332f2c; border-bottom: 2px solid var(--primary);">
+        <th style="padding: 15px;">ID / Клієнт</th>
+        <th style="padding: 15px;">Сума</th>
+        <th style="padding: 15px;">Статус</th>
+        <th style="padding: 15px;">Дата</th>
+        <th style="padding: 15px; text-align: center;">Дії</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @orders.each do |order| %>
+        <tr style="border-bottom: 1px solid #3d3835;">
+          <td style="padding: 15px;">
+            <div style="font-weight: bold;">№<%= order.id.to_s.first(8).upcase %></div>
+            <small style="color: var(--muted);"><%= order.full_name %></small>
+          </td>
+          <td style="padding: 15px;"><%= number_to_currency(order.total_price, unit: "₴") %></td>
+          <td style="padding: 15px;">
+            <%= form_with(model: [:admin, order], local: true, method: :patch) do |f| %>
+              <%= f.select :status, Order.statuses.keys.map { |s| [s.upcase, s] }, {}, 
+                  { onchange: "this.form.submit()", 
+                    style: "background: #1a1a1a; color: white; border: 1px solid var(--muted); padding: 5px; border-radius: 4px; cursor: pointer;" } %>
+            <% end %>
+          </td>
+          <td style="padding: 15px; font-size: 0.85rem;">
+            <%= order.created_at.strftime("%d.%m.%Y %H:%M") %>
+          </td>
+          <td style="padding: 15px; text-align: center;">
+            <%= link_to "Деталі 🔍", admin_order_path(order), class: "btn-outline", style: "padding: 5px 10px; font-size: 0.8rem; text-decoration: none;" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

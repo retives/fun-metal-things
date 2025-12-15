@@ -12872,3 +12872,29 @@ app/views/orders/show.html.erb:10
 Information for cause: NoMethodError (undefined method 'id' for nil):
   
 app/views/orders/show.html.erb:10
+Started GET "/" for 127.0.0.1 at 2025-12-15 15:03:53 +0200
+Processing by ItemsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering items/index.html.erb within layouts/application
+  [1m[36mTag Load (0.6ms)[0m  [1m[34mSELECT "tags".* FROM "tags" /*action='index',application='FunMetalThings',controller='items'*/[0m
+  ↳ app/views/items/index.html.erb:21
+  [1m[36mItem Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "items" LIMIT 1 /*action='index',application='FunMetalThings',controller='items'*/[0m
+  ↳ app/views/items/index.html.erb:46
+  [1m[36mItem Load (0.9ms)[0m  [1m[34mSELECT DISTINCT "items".* FROM "items" /*action='index',application='FunMetalThings',controller='items'*/[0m
+  ↳ app/views/items/index.html.erb:47
+  [1m[36mTagging Load (0.5ms)[0m  [1m[34mSELECT "taggings".* FROM "taggings" WHERE "taggings"."item_id" IN ('2eba8c8b-fd48-48f7-b2e8-a7393c400930', 'ceb10b44-6e31-4f98-a1e4-a62cb2caa970', 'c0f5804f-210d-49a0-b9a4-281e4914c243', '66b5b98a-4ba4-4ab3-88f5-d4f67a6dc034', 'c74ffcad-3ea5-4e84-bf0b-5fc064a4ae31', '9b81adff-f6dd-4bfe-a06a-598849a9f6b6', '0c8b9526-c1f3-478c-b4b6-c436c107527f') /*action='index',application='FunMetalThings',controller='items'*/[0m
+  ↳ app/views/items/index.html.erb:47
+  [1m[36mTag Load (0.4ms)[0m  [1m[34mSELECT "tags".* FROM "tags" WHERE "tags"."id" IN ('cfe230ad-4685-40ba-851c-ca718f55c69f', '455ac21b-f9c6-4de0-bff0-bf097afe3efb', '35ada840-941f-498a-9be1-51062bb6bb65') /*action='index',application='FunMetalThings',controller='items'*/[0m
+  ↳ app/views/items/index.html.erb:47
+  Rendered collection of items/_item.html.erb [7 times] (Duration: 6.1ms | GC: 1.1ms)
+  Rendered items/index.html.erb within layouts/application (Duration: 45.7ms | GC: 4.8ms)
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = '29664367-af55-4d92-813f-12f794ff47ed' ORDER BY "users"."id" ASC LIMIT 1 /*action='index',application='FunMetalThings',controller='items'*/[0m
+  ↳ app/views/layouts/application.html.erb:31
+  [1m[36mCart Load (0.5ms)[0m  [1m[34mSELECT "carts".* FROM "carts" WHERE "carts"."user_id" = '29664367-af55-4d92-813f-12f794ff47ed' LIMIT 1 /*action='index',application='FunMetalThings',controller='items'*/[0m
+  ↳ app/controllers/application_controller.rb:9:in 'ApplicationController#current_cart'
+  [1m[36mCartItem Sum (0.7ms)[0m  [1m[34mSELECT SUM("cart_items"."quantity") FROM "cart_items" WHERE "cart_items"."cart_id" = '5af55bff-b30e-4c85-a93a-3a65cc3e3045' /*action='index',application='FunMetalThings',controller='items'*/[0m
+  ↳ app/views/layouts/application.html.erb:34
+  Rendered layout layouts/application.html.erb (Duration: 52.9ms | GC: 4.8ms)
+Completed 200 OK in 110ms (Views: 40.5ms | ActiveRecord: 39.5ms (8 queries, 0 cached) | GC: 7.7ms)
+
+

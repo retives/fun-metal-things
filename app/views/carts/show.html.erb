@@ -25,8 +25,6 @@
               <td style="padding: 15px;"><%= number_to_currency(cart_item.item.price, unit: "₴") %></td>
               <td style="padding: 15px;">
                 <div style="display: flex; align-items: center; gap: 10px; background: #2b2724; padding: 5px; border-radius: 6px; width: fit-content; border: 1px solid var(--muted);">
-                    
-                    <%# Кнопка Мінус %>
                     <%= button_to cart_item_path(cart_item, operation: 'decrement'), 
                                 method: :patch, 
                                 class: "qty-btn", 
@@ -67,7 +65,7 @@
         </div>
         <div style="display: flex; gap: 20px;">
           <%= link_to "Продовжити покупки", items_path, class: "nav-link" %>
-          <%= button_to "Оформити замовлення 🤘", "#", class: "btn-primary" %>
+          <%= link_to "Оформити замовлення 🤘",new_order_path,  class: "btn-primary" %>
         </div>
       </div>
     </div>

@@ -1,0 +1,30 @@
+<%# app/views/orders/payment.html.erb %>
+<div class="content-wrapper" style="max-width: 600px; margin: 50px auto; text-align: center;">
+  <div class="item-card" style="padding: 40px; border: 2px solid var(--primary); background: #2b2724;">
+    <h2 style="color: var(--primary);">ПЕРЕХІД ДО ОПЛАТИ</h2>
+    <p style="color: var(--text-muted); margin-bottom: 30px;">Ви будете перенаправлені на захищену сторінку Stripe 💳</p>
+
+    <div style="background: #332f2c; padding: 20px; border-radius: 8px; margin-bottom: 30px; text-align: left;">
+      <p><strong>Замовлення:</strong> №<%= @order.id.to_s.first(8) %></p>
+      <p><strong>Сума:</strong> <span style="color: var(--primary);"><%= number_to_currency(@order.total_price, unit: "₴") %></span></p>
+    </div>
+
+    <button id="checkout-button" class="btn-primary" style="width: 100%; padding: 15px; font-size: 1.2rem; cursor: pointer;">
+      ПЕРЕЙТИ В STRIPE 🤘
+    </button>
+  </div>
+</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  var stripe = Stripe('<%= Rails.application.credentials.dig(:stripe, :publishable_key) || ENV['STRIPE_PUBLISHABLE_KEY'] %>');
+  var checkoutButton = document.getElementById('checkout-button');
+
+  checkoutButton.addEventListener('click', function() {
+    stripe.redirectToCheckout({
+      sessionId: '<%= @session.id %>'
+    }).then(function (result) {
+      if (result.error) { alert(result.error.message); }
+    });
+  });
+</script>

@@ -2,13 +2,21 @@ Rails.application.routes.draw do
   get "items/index"
   get "items/show"
   devise_for :users
+
   resources :items, only: [ :index, :show ] do
     resources :reviews, outline: [ :create ]
   end
   resources :cart_items, only: [ :create, :destroy, :update ]
   resource :cart, only: [ :show ]
-
+  resources :orders, only: [ :new, :create, :show, :index ]
   resource :profile, only: [ :show, :edit, :update ]
+
+  resources :orders, only: [ :new, :create, :show, :index ] do
+    member do
+      get :payment           # Створює payment_order_path(@order)
+      patch :confirm_payment  # Створює confirm_payment_order_path(@order)
+    end
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

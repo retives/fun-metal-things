@@ -23,15 +23,38 @@
       <div style="margin-bottom: 40px;">
         <h3 style="border-left: 4px solid var(--primary); padding-left: 15px;">Мої замовлення</h3>
         <% if @orders.any? %>
-          <div class="orders-list">
+          <div class="orders-history">
             <% @orders.each do |order| %>
-              <div style="background: #2b2724; margin-bottom: 10px; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between;">
-                <span>Замовлення №<%= order.id.to_s.first(8) %></span>
-                <span style="color: var(--primary);"><%= number_to_currency(order.total_amount, unit: "₴") %></span>
-                <span class="status-tag"><%= order.status %></span> 
+              <div class="item-card" style="margin-bottom: 20px; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+                
+                <div>
+                  <h3 style="margin: 0; color: var(--primary);">ЗАМОВЛЕННЯ №<%= order.id.to_s.first(8).upcase %></h3>
+                  <p style="margin: 5px 0; font-size: 0.9rem; color: var(--muted);">
+                    Дата: <%= order.created_at.strftime("%d.%m.%Y") %> | 
+                    Статус: <span class="status-badge <%= order.status %>"><%= order.status.upcase %></span>
+                  </p>
+                  <p style="margin: 0; font-weight: bold;"><%= number_to_currency(order.total_amount, unit: "₴") %></p>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                  <%= link_to "Переглянути", order_path(order), class: "btn-outline", style: "padding: 8px 15px; font-size: 0.8rem;" %>
+                  <% if order.pending? %>
+                    <%= link_to "ОПЛАТИТИ 💳", payment_order_path(order), 
+                        class: "btn-primary", 
+                        style: "padding: 8px 15px; font-size: 0.8rem; box-shadow: 0 0 10px rgba(207, 109, 55, 0.4);" %>
+                  <% end %>
+                </div>
+
               </div>
             <% end %>
           </div>
+
+          <style>
+            .status-badge { padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
+            .status-badge.pending { background: #555; color: #fff; }
+            .status-badge.paid { background: #2e7d32; color: #fff; }
+            .status-badge.shipped { background: var(--primary); color: #fff; }
+          </style>
         <% else %>
           <p style="color: var(--muted);">Ви ще не робили замовлень. </p>
         <% end %>

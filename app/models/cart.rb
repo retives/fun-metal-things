@@ -3,7 +3,6 @@ class Cart < ApplicationRecord
   has_many :cart_items, dependent: :destroy
 
   def total_price
-    cart_items.sum { |item| item.item.price * item.quantity } [cite: 169]
+    cart_items.sum { |item| item.item.price * item.quantity }
   end
 end
-

@@ -165,7 +165,12 @@ CREATE TABLE public.orders (
     status character varying,
     user_id uuid,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    full_name character varying,
+    phone character varying,
+    address text,
+    payment_method character varying,
+    stripe_session_id character varying
 );
 
 
@@ -661,6 +666,7 @@ ALTER TABLE ONLY public.orders
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251215091632'),
 ('20251212163058'),
 ('20251212111221'),
 ('20251212110241'),

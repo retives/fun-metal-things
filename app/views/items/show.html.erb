@@ -7,17 +7,16 @@
     
     <div class="item-visuals" style="flex: 1;">
       <div style="background: #2b2724; border-radius: 8px; min-height: 400px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--muted);">
-        
-        <!--
-        <%# if @item.images.attached? %>
-          <%#= image_tag @item.images.first, style: "max-width: 100%; height: auto; border-radius: 4px;" %>
-        <%# else %>
+
+        <% if @item.image.attached? %>
+          <%= image_tag @item.image, style: "max-width: 100%; height: auto; border-radius: 4px;" %>
+        <% else %>
           <div style="text-align: center; color: var(--muted);">
             <span style="font-size: 4rem;">🎸</span>
             <p>Зображення очікується</p>
           </div>
-        <%# end %>
-        -->
+        <% end %>
+
       </div>
     </div>
 
@@ -95,7 +94,6 @@
     </p>
   <% end %>
 
-  <%# Список існуючих відгуків %>
   <div class="reviews-list">
     <% if @item.reviews.any? %>
       <% @item.reviews.order(created_at: :desc).each do |review| %>

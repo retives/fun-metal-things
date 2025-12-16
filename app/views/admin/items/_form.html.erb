@@ -12,7 +12,17 @@
         </ul>
       </div>
     <% end %>
+    <div style="margin-bottom: 20px;">
+      <%= f.label :image, "ФОТО ТОВАРУ 📸", style: "display: block; color: var(--primary); margin-bottom: 8px;" %>
+      <%= f.file_field :image, class: "form-control", style: "background: #1a1a1a; color: white; padding: 10px; width: 100%;" %>
+    </div>
 
+    <% if item.image.attached? %>
+      <div style="margin-bottom: 20px;">
+        <p style="color: var(--muted);">Поточне фото:</p>
+        <%= image_tag @item.image.variant(resize_to_limit: [200, 200]), style: "border: 1px solid var(--primary); border-radius: 4px;" %>
+      </div>
+    <% end %>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
       <div class="form-group" style="grid-column: span 2;">
         <%= f.label :name, "Назва інструменту", style: "display: block; color: var(--primary); margin-bottom: 8px;" %>

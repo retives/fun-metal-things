@@ -3,42 +3,40 @@
   <p>Завантаження даних замовлення... Якщо сторінка не оновилась, перейдіть до профілю.</p>
 <% else %>
   <div class="item-card">
-    <h1 style="color: var(--primary);">ЧЕК №<%= @order.id.to_s.first(8).upcase %></h1>
+    <h1 class="page-title">ЧЕК №<%= @order.id.to_s.first(8).upcase %></h1>
   </div>
 <% end %>
-<div class="content-wrapper" style="max-width: 800px; margin: 0 auto; padding: 50px 20px;">
-  <div class="item-card" style="padding: 40px; border: 3px solid var(--primary); background: #1a1a1a; position: relative;">
+<div class="content-wrapper content-wrapper--narrow">
+  <div class="item-card order-card--highlight">
     
     <%# Штамп статусу %>
-    <div style="position: absolute; top: 20px; right: 20px; border: 4px solid #4CAF50; color: #4CAF50; padding: 10px 20px; border-radius: 8px; transform: rotate(15deg); font-weight: 800; font-size: 1.5rem;">
-      ОПЛАЧЕНО 🤘
-    </div>
+    <div class="order-stamp">ОПЛАЧЕНО 🤘</div>
 
-    <h1 style="color: var(--primary); margin-top: 0;">ЧЕК №<%= @order.id.to_s.first(8).upcase %></h1>
-    <p style="color: var(--muted);">Дякуємо за довіру до FunMetalThings! Твоє замовлення вже готується до відправки.</p>
+    <h1 class="section-title">ЧЕК №<%= @order.id.to_s.first(8).upcase %></h1>
+    <p class="muted">Дякуємо за довіру до FunMetalThings! Твоє замовлення вже готується до відправки.</p>
 
-    <div style="margin: 40px 0; border-top: 1px dashed var(--muted); border-bottom: 1px dashed var(--muted); padding: 20px 0;">
+    <div class="order-items">
       <% @order.order_items.each do |oi| %>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+        <div class="order-item-row">
           <span><%= oi.item.name %> (x<%= oi.quantity %>)</span>
-          <span style="font-weight: bold;"><%= number_to_currency(oi.price_at_purchase * oi.quantity, unit: "₴") %></span>
+          <span class="price" style="font-weight: bold;"><%= number_to_currency(oi.price_at_purchase * oi.quantity, unit: "₴") %></span>
         </div>
       <% end %>
     </div>
 
     <div style="text-align: right; margin-bottom: 30px;">
-      <h2 style="margin: 0;">РАЗОМ: <span style="color: var(--primary);"><%= number_to_currency(@order.total_price, unit: "₴") %></span></h2>
+      <h2 style="margin: 0;">РАЗОМ: <span class="price"><%= number_to_currency(@order.total_price, unit: "₴") %></span></h2>
     </div>
 
-    <div style="background: #2b2724; padding: 20px; border-radius: 8px; font-size: 0.9rem;">
+    <div class="order-info">
       <p><strong>Отримувач:</strong> <%= @order.full_name %></p>
       <p><strong>Адреса:</strong> <%= @order.address %></p>
       <p><strong>Телефон:</strong> <%= @order.phone %></p>
     </div>
 
-    <div style="margin-top: 40px; display: flex; gap: 20px;">
-      <%= link_to "НА ГОЛОВНУ", root_path, class: "btn-primary", style: "flex: 1; text-align: center; text-decoration: none;" %>
-      <button onclick="window.print();" class="btn-outline" style="flex: 1; cursor: pointer;">ДРУКУВАТИ ЧЕК 🖨️</button>
+    <div class="action-row">
+      <%= link_to "НА ГОЛОВНУ", root_path, class: "btn-primary btn-block" %>
+      <button onclick="window.print();" class="btn-outline">ДРУКУВАТИ ЧЕК 🖨️</button>
     </div>
   </div>
 </div>

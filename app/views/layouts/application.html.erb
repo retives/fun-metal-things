@@ -18,7 +18,7 @@
     <header class="main-header">
       <%= link_to root_path, class: "logo-link" do %>
         <div class="logo-icon">
-          <%= image_tag "logo.png", style: "width: 100px; height: auto; display: block;" %>
+          <%= image_tag "logo.png", style: "width: 100px; height: auto;" %>
         </div>
         <span class="logo-text">FunMetalThings</span>
       <% end %>
@@ -30,7 +30,7 @@
         <div class="user-actions">
           <% if user_signed_in? %>
             <% if current_user.admin? %>
-              <%= link_to "АДМІН-ПАНЕЛЬ", admin_root_path, class: "admin-link", style: "color: var(--primary); font-weight: bold;" %>
+              <%= link_to "АДМІН-ПАНЕЛЬ", admin_root_path, class: "admin-link" %>
             <% end %>
           <% end %>
           <% if user_signed_in? %>

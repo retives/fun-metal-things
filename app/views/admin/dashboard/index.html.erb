@@ -1,18 +1,18 @@
 <div class="content-wrapper">
-  <h1 style="color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 10px;">ADMIN DASHBOARD ⚡</h1>
+  <h1 class="page-title page-title--underline">ADMIN DASHBOARD ⚡</h1>
 
-  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 30px 0;">
-    <div class="item-card" style="text-align: center;">
+  <div class="admin-stats">
+    <div class="item-card item-card--center">
       <h3>ЗАМОВЛЕНЬ</h3>
-      <p style="font-size: 2rem; color: var(--primary);"><%= @orders_count %></p>
+  <p class="stat-value stat-value--primary"><%= @orders_count %></p>
     </div>
-    <div class="item-card" style="text-align: center;">
+    <div class="item-card item-card--center">
       <h3>ВИРУЧКА</h3>
-      <p style="font-size: 2rem; color: #4CAF50;"><%= number_to_currency(@total_revenue, unit: "₴") %></p>
+  <p class="stat-value stat-value--success"><%= number_to_currency(@total_revenue, unit: "₴") %></p>
     </div>
-    <div class="item-card" style="text-align: center;">
+    <div class="item-card item-card--center">
       <h3>КЛІЄНТІВ</h3>
-      <p style="font-size: 2rem;"><%= User.client.count %></p>
+      <p class="stat-value"><%= User.client.count %></p>
     </div>
   </div>
 

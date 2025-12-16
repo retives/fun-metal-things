@@ -1,17 +1,16 @@
-<div class="content-wrapper" style="max-width: 450px; margin: 40px auto;">
-  <div class="item-card" style="padding: 40px;">
-    <h2 style="text-align: center; margin-bottom: 20px;">ЗАБУЛИ ПАРОЛЬ? 🛠️</h2>
-    <p style="color: var(--muted); text-align: center; font-size: 0.9rem; margin-bottom: 30px;">Введіть ваш email, і ми надішлемо інструкції для відновлення доступу.</p>
+<div class="auth-wrapper">
+  <div class="item-card auth-card">
+    <h2 class="auth-title">ЗАБУЛИ ПАРОЛЬ? 🛠️</h2>
+    <p class="muted" style="text-align: center; font-size: 0.9rem; margin-bottom: 30px;">Введіть ваш email, і ми надішлемо інструкції для відновлення доступу.</p>
 
     <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
-      <div class="form-group" style="margin-bottom: 25px;">
-        <%= f.email_field :email, autofocus: true, placeholder: "Ваш email", class: "form-control", 
-            style: "width: 100%; background: #2b2724; border: 1px solid var(--primary); color: white; padding: 12px; border-radius: 6px;" %>
+      <div class="form-group form-row">
+        <%= f.email_field :email, autofocus: true, placeholder: "Ваш email", class: "form-control" %>
       </div>
 
-      <%= f.submit "Скинути пароль", class: "btn-primary", style: "width: 100%;" %>
+      <%= f.submit "Скинути пароль", class: "btn-primary btn-block" %>
     <% end %>
   </div>
 </div>

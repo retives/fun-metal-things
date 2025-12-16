@@ -1,56 +1,49 @@
 <div class="content-wrapper">
-  <div class="profile-header" style="margin-bottom: 30px; border-bottom: 2px solid var(--primary);">
+  <div class="profile-header">
     <h1>Ваш кошик 🛒</h1>
   </div>
 
   <% if @cart_items.any? %>
-    <div class="item-card" style="padding: 0; overflow: hidden;">
-      <table style="width: 100%; border-collapse: collapse; color: var(--white);">
+    <div class="item-card item-card--flush item-card--dark">
+      <table class="table--full cart-table">
         <thead>
-          <tr style="background: var(--dark-brown); text-align: left;">
-            <th style="padding: 15px;">Товар</th>
-            <th style="padding: 15px;">Ціна</th>
-            <th style="padding: 15px;">Кількість</th>
-            <th style="padding: 15px;">Сума</th>
-            <th style="padding: 15px;"></th>
+          <tr>
+            <th>Товар</th>
+            <th>Ціна</th>
+            <th>Кількість</th>
+            <th>Сума</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <% @cart_items.each do |cart_item| %>
-            <tr style="border-bottom: 1px solid var(--dark-brown);">
-              <td style="padding: 15px; display: flex; align-items: center; gap: 15px;">
-                <div style="width: 50px; height: 50px; background: #2b2724; border-radius: 4px; display: flex; align-items: center; justify-content: center;">🎸</div>
+            <tr class="table-row">
+              <td class="cart-cell cart-cell--media">
+                <div class="item-thumb">🎸</div>
                 <strong><%= cart_item.item.name %></strong>
               </td>
-              <td style="padding: 15px;"><%= number_to_currency(cart_item.item.price, unit: "₴") %></td>
-              <td style="padding: 15px;">
-                <div style="display: flex; align-items: center; gap: 10px; background: #2b2724; padding: 5px; border-radius: 6px; width: fit-content; border: 1px solid var(--muted);">
-                    <%= button_to cart_item_path(cart_item, operation: 'decrement'), 
-                                method: :patch, 
-                                class: "qty-btn", 
-                                disabled: cart_item.quantity <= 1,
-                                style: "background: none; border: none; color: var(--primary); cursor: pointer; font-weight: bold; font-size: 1.2rem;" do %>
+              <td><%= number_to_currency(cart_item.item.price, unit: "₴") %></td>
+              <td>
+                <div class="cart-qty-wrap">
+                    <%= button_to cart_item_path(cart_item, operation: 'decrement'), method: :patch, class: "qty-btn", disabled: cart_item.quantity <= 1 do %>
                     −
                     <% end %>
 
-                    <span style="font-weight: bold; min-width: 20px; text-align: center;">
-                    <%= cart_item.quantity %>
+                    <span class="qty-count">
+                      <%= cart_item.quantity %>
                     </span>
 
                     <%# Кнопка Плюс %>
-                    <%= button_to cart_item_path(cart_item, operation: 'increment'), 
-                                method: :patch, 
-                                class: "qty-btn", 
-                                style: "background: none; border: none; color: var(--primary); cursor: pointer; font-weight: bold; font-size: 1.2rem;" do %>
+                    <%= button_to cart_item_path(cart_item, operation: 'increment'), method: :patch, class: "qty-btn" do %>
                     +
                     <% end %>
                 </div>
                 </td>
-              <td style="padding: 15px; color: var(--primary); font-weight: bold;">
+              <td class="price" style="font-weight: bold; color: var(--primary);">
                 <%= number_to_currency(cart_item.quantity * cart_item.item.price, unit: "₴") %>
               </td>
-              <td style="padding: 15px; text-align: right;">
-                <%= button_to cart_item_path(cart_item), method: :delete, class: "btn-outline", style: "color: #ff4500; border-color: #ff4500; padding: 5px 10px;" do %>
+              <td style="text-align: right;">
+                <%= button_to cart_item_path(cart_item), method: :delete, class: "btn-outline btn-outline--danger btn-outline--small" do %>
                   Видалити
                 <% end %>
               </td>
@@ -59,9 +52,9 @@
         </tbody>
       </table>
 
-      <div style="padding: 30px; display: flex; justify-content: space-between; align-items: center; background: #2b2724;">
+      <div class="cart-summary">
         <div>
-          <h2 style="margin: 0;">Разом: <span style="color: var(--primary);"><%= number_to_currency(@total_price, unit: "₴") %></span></h2>
+          <h2>Разом: <span class="price"><%= number_to_currency(@total_price, unit: "₴") %></span></h2>
         </div>
         <div style="display: flex; gap: 20px;">
           <%= link_to "Продовжити покупки", items_path, class: "nav-link" %>
@@ -70,9 +63,9 @@
       </div>
     </div>
   <% else %>
-    <div style="text-align: center; padding: 100px 0;">
-      <h2 style="color: var(--muted);">Ваш кошик порожній... поки що.</h2>
-      <%= link_to "Перейти до каталогу", items_path, class: "btn-primary", style: "display: inline-block; margin-top: 20px;" %>
+    <div class="empty-cart">
+      <h2>Ваш кошик порожній... поки що.</h2>
+      <%= link_to "Перейти до каталогу", items_path, class: "btn-primary" %>
     </div>
   <% end %>
 </div>

@@ -1,33 +1,31 @@
-<div class="content-wrapper" style="max-width: 450px; margin: 40px auto;">
-  <div class="item-card" style="padding: 40px; border-top: 4px solid var(--primary);">
-    <h2 style="text-align: center; margin-bottom: 30px; letter-spacing: 1px;">ВХІД У КАБІНЕТ 🤘</h2>
+<div class="auth-wrapper">
+  <div class="item-card auth-card card--top-accent">
+    <h2 class="auth-title">ВХІД У КАБІНЕТ 🤘</h2>
 
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-      <div class="form-group" style="margin-bottom: 20px;">
-        <%= f.label :email, "Електронна пошта", style: "display: block; color: var(--primary); margin-bottom: 8px;" %>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", 
-            style: "width: 100%; background: #2b2724; border: 1px solid var(--muted); color: white; padding: 12px; border-radius: 6px;" %>
+      <div class="form-group form-row">
+        <%= f.label :email, "Електронна пошта", class: "form-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
       </div>
 
-      <div class="form-group" style="margin-bottom: 20px;">
-        <%= f.label :password, "Пароль", style: "display: block; color: var(--primary); margin-bottom: 8px;" %>
-        <%= f.password_field :password, autocomplete: "current-password", class: "form-control",
-            style: "width: 100%; background: #2b2724; border: 1px solid var(--muted); color: white; padding: 12px; border-radius: 6px;" %>
+      <div class="form-group form-row">
+        <%= f.label :password, "Пароль", class: "form-label" %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
       </div>
 
       <% if devise_mapping.rememberable? %>
-        <div style="margin-bottom: 25px; display: flex; align-items: center; gap: 10px;">
+        <div class="form-remember">
           <%= f.check_box :remember_me %>
-          <%= f.label :remember_me, "Запам'ятати мене", style: "font-size: 0.9rem; color: var(--muted);" %>
+          <%= f.label :remember_me, "Запам'ятати мене", class: "muted" %>
         </div>
       <% end %>
 
       <div class="actions">
-        <%= f.submit "УВІЙТИ", class: "btn-primary", style: "width: 100%;" %>
+        <%= f.submit "УВІЙТИ", class: "btn-primary btn-block" %>
       </div>
     <% end %>
 
-    <div style="margin-top: 25px; text-align: center; border-top: 1px solid var(--dark-brown); padding-top: 20px;">
+    <div class="auth-footer">
       <%= render "devise/shared/links" %>
     </div>
   </div>

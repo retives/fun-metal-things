@@ -1,48 +1,50 @@
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-  <h1 style="color: var(--primary); margin: 0;">ІНВЕНТАР ТОВАРІВ 🎸</h1>
-  <%= link_to "ДОДАТИ НОВИЙ ТОВАР +", new_admin_item_path, class: "btn-primary", style: "text-decoration: none;" %>
+<div class="page-header">
+  <h1>ІНВЕНТАР ТОВАРІВ 🎸</h1>
+  <div class="page-actions">
+    <%= link_to "ДОДАТИ НОВИЙ ТОВАР +", new_admin_item_path, class: "btn-primary" %>
+  </div>
 </div>
 
-<div class="item-card" style="padding: 0; overflow: hidden; background: #2b2724; border: 1px solid var(--dark-brown);">
-  <table style="width: 100%; border-collapse: collapse; color: #fff; text-align: left;">
+<div class="item-card item-card--flush item-card--dark">
+  <table class="table--full">
     <thead>
-      <tr style="background: #332f2c; border-bottom: 2px solid var(--primary);">
-        <th style="padding: 15px;">Товар</th>
-        <th style="padding: 15px;">Ціна</th>
-        <th style="padding: 15px;">Кількість</th>
-        <th style="padding: 15px;">Статус</th>
-        <th style="padding: 15px; text-align: center;">Дії</th>
+      <tr>
+        <th>Товар</th>
+        <th>Ціна</th>
+        <th>Кількість</th>
+        <th>Статус</th>
+        <th style="text-align: center;">Дії</th>
       </tr>
     </thead>
     <tbody>
       <% @items.each do |item| %>
-        <tr style="border-bottom: 1px solid #3d3835; transition: background 0.3s;" onmouseover="this.style.background='#332f2c'" onmouseout="this.style.background='transparent'">
-          <td style="padding: 15px;">
+        <tr class="table-row">
+          <td>
             <div style="display: flex; align-items: center; gap: 10px;">
               <span style="font-size: 1.2rem;">🎸</span>
               <div>
                 <div style="font-weight: bold;"><%= item.name %></div>
-                <small style="color: var(--muted);"><%= item.id.to_s.first(8) %></small>
+                <small class="muted"><%= item.id.to_s.first(8) %></small>
               </div>
             </div>
           </td>
-          <td style="padding: 15px;"><%= number_to_currency(item.price, unit: "₴") %></td>
-          <td style="padding: 15px;">
-            <span style="<%= 'color: #ff4500;' if item.quantity < 3 %>">
+          <td><%= number_to_currency(item.price, unit: "₴") %></td>
+          <td>
+            <span class="<%= 'low-stock' if item.quantity < 3 %>">
               <%= item.quantity %> шт.
             </span>
           </td>
-          <td style="padding: 15px;">
+          <td>
             <% if item.quantity > 0 %>
-              <span style="color: #4CAF50;">● В продажу</span>
+              <span class="status-available">● В продажу</span>
             <% else %>
-              <span style="color: var(--primary);">● Немає</span>
+              <span class="status-unavailable">● Немає</span>
             <% end %>
           </td>
-          <td style="padding: 15px; text-align: center;">
+          <td style="text-align: center;">
             <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
 
-              <%= link_to "✏️", edit_admin_item_path(item), title: "Редагувати", style: "text-decoration: none; font-size: 1.2rem;" %>
+              <%= link_to "✏️", edit_admin_item_path(item), title: "Редагувати", class: "", style: "font-size: 1.2rem; text-decoration: none;" %>
 
               <%= button_to admin_item_path(item), 
                   method: :delete, 

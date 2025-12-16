@@ -1,52 +1,52 @@
 <%# app/views/admin/items/_form.html.erb %>
-<div class="item-card" style="max-width: 800px; margin: 0 auto; padding: 30px; background: #2b2724;">
+<div class="item-card item-card--form">
   <%= form_with(model: [:admin, item], local: true) do |f| %>
     
     <% if item.errors.any? %>
-      <div style="background: rgba(207, 109, 55, 0.1); border: 1px solid var(--primary); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-        <h4 style="color: var(--primary); margin-top: 0;">Помилки при збереженні:</h4>
-        <ul style="color: #ff6b6b; font-size: 0.9rem;">
+      <div class="form-errors">
+        <h4>Помилки при збереженні:</h4>
+        <ul>
           <% item.errors.full_messages.each do |message| %>
             <li><%= message %></li>
           <% end %>
         </ul>
       </div>
     <% end %>
-    <div style="margin-bottom: 20px;">
-      <%= f.label :image, "ФОТО ТОВАРУ 📸", style: "display: block; color: var(--primary); margin-bottom: 8px;" %>
-      <%= f.file_field :image, class: "form-control", style: "background: #1a1a1a; color: white; padding: 10px; width: 100%;" %>
+    <div class="form-row">
+      <%= f.label :image, "ФОТО ТОВАРУ 📸", class: "form-label" %>
+      <%= f.file_field :image, class: "form-control" %>
     </div>
 
     <% if item.image.attached? %>
-      <div style="margin-bottom: 20px;">
-        <p style="color: var(--muted);">Поточне фото:</p>
-        <%= image_tag @item.image.variant(resize_to_limit: [200, 200]), style: "border: 1px solid var(--primary); border-radius: 4px;" %>
+      <div class="form-row">
+        <p class="muted">Поточне фото:</p>
+        <%= image_tag @item.image.variant(resize_to_limit: [200, 200]), class: "item-thumb" %>
       </div>
     <% end %>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-      <div class="form-group" style="grid-column: span 2;">
-        <%= f.label :name, "Назва інструменту", style: "display: block; color: var(--primary); margin-bottom: 8px;" %>
-        <%= f.text_field :name, class: "form-control", style: "width: 100%; background: #332f2c; color: white; border: 1px solid var(--muted); padding: 12px; border-radius: 6px;" %>
+    <div class="form-grid">
+      <div class="form-group form-group--full">
+        <%= f.label :name, "Назва інструменту", class: "form-label" %>
+        <%= f.text_field :name, class: "form-control" %>
       </div>
 
       <div class="form-group">
-        <%= f.label :price, "Ціна (₴)", style: "display: block; color: var(--primary); margin-bottom: 8px;" %>
-        <%= f.number_field :price, step: 0.01, class: "form-control", style: "width: 100%; background: #332f2c; color: white; border: 1px solid var(--muted); padding: 12px; border-radius: 6px;" %>
+        <%= f.label :price, "Ціна (₴)", class: "form-label" %>
+        <%= f.number_field :price, step: 0.01, class: "form-control" %>
       </div>
 
       <div class="form-group">
-        <%= f.label :quantity, "Кількість на складі", style: "display: block; color: var(--primary); margin-bottom: 8px;" %>
-        <%= f.number_field :quantity, class: "form-control", style: "width: 100%; background: #332f2c; color: white; border: 1px solid var(--muted); padding: 12px; border-radius: 6px;" %>
+        <%= f.label :quantity, "Кількість на складі", class: "form-label" %>
+        <%= f.number_field :quantity, class: "form-control" %>
       </div>
 
-      <div class="form-group" style="grid-column: span 2;">
-        <%= f.label :description, "Опис", style: "display: block; color: var(--primary); margin-bottom: 8px;" %>
-        <%= f.text_area :description, rows: 6, class: "form-control", style: "width: 100%; background: #332f2c; color: white; border: 1px solid var(--muted); padding: 12px; border-radius: 6px; resize: vertical;" %>
+      <div class="form-group form-group--full">
+        <%= f.label :description, "Опис", class: "form-label" %>
+        <%= f.text_area :description, rows: 6, class: "form-control" %>
       </div>
 
-      <div class="form-group" style="grid-column: span 2;">
-        <label style="display: block; color: var(--primary); margin-bottom: 15px;">Теги та Категорії</label>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: #1a1a1a; padding: 15px; border-radius: 8px;">
+      <div class="form-group form-group--full">
+        <label class="form-label">Теги та Категорії</label>
+        <div class="tags-grid">
           <%= f.collection_check_boxes :tag_ids, Tag.all, :id, :name do |b| %>
             <label style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; cursor: pointer;">
               <%= b.check_box %>
@@ -59,7 +59,7 @@
 
     <div style="margin-top: 30px; display: flex; gap: 15px;">
       <%= f.submit item.new_record? ? "СТВОРИТИ ТОВАР 🤘" : "ОНОВИТИ ТОВАР ✨", class: "btn-primary", style: "flex: 2; padding: 15px;" %>
-      <%= link_to "СКАСУВАТИ", admin_items_path, class: "btn-outline", style: "flex: 1; text-align: center; display: flex; align-items: center; justify-content: center; text-decoration: none;" %>
+      <%= link_to "СКАСУВАТИ", admin_items_path, class: "btn-outline" %>
     </div>
   <% end %>
 </div>

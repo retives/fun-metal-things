@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  namespace :admin do
+    resources :tags
+  end
   get "items/index"
   get "items/show"
   devise_for :users
@@ -22,9 +25,10 @@ resources :orders, only: [:new, :create, :show] do
   end
   # Admin routes
   namespace :admin do
-    root to: "dashboard#index"
     resources :items
-    resources :orders, only: [ :index, :show, :update ] # Додано :update
+    resources :orders, only: [:index, :show]
+    resources :tags # Це посилання на ваш новий scaffold_controller
+    root to: "items#index"
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

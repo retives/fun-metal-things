@@ -1,12 +1,12 @@
 <div class="content-wrapper" style="max-width: 600px; margin: 50px auto; text-align: center;">
-  <div class="item-card" style="padding: 40px; border: 2px solid var(--primary); background: #2b2724;">
+  <div class="item-card" style="padding: 40px; border: 2px solid var(--primary); background: #2b2724;"> 
     <% if @order.present? && @session.present? %>
       <h2 style="color: var(--primary); margin-bottom: 20px;">ПЕРЕХІД ДО ОПЛАТИ 💳</h2>
       
       <div style="background: #332f2c; padding: 20px; border-radius: 8px; margin-bottom: 30px; text-align: left; border-left: 4px solid var(--primary);">
-        <p><strong>Замовлення:</strong> №<%= @order %></p>
+        <p><strong>Замовлення:</strong> №<%= @order.id.to_s.first(8).upcase %></p>
         <p><strong>Сума до сплати:</strong> <span style="color: var(--primary); font-size: 1.2rem; font-weight: bold;">
-          <%= number_to_currency(@order.total_amount, unit: "₴") %>
+          <%= number_to_currency(@order.total_price, unit: "₴") %>
         </span></p>
       </div>
 
@@ -31,12 +31,17 @@
       </script>
 
     <% else %>
-      <div style="padding: 20px; border: 1px dashed red;">
-        <h3 style="color: #ff4500;">Помилка ініціалізації оплати</h3>
-        <p>Не вдалося завантажити дані замовлення. Спробуйте повернутися в профіль і натиснути "Оплатити" ще раз.</p>
-        <%= link_to "ПОВЕРНУТИСЬ В ПРОФІЛЬ", profile_path, class: "btn-outline" %>
-      </div>
-    <% end %>
+    <div style="padding: 20px; border: 1px dashed red; background: rgba(255,0,0,0.05);">
+      <h3 style="color: #ff4500;">Помилка ініціалізації оплати</h3>
+      
+      <% if @stripe_error %>
+        <div style="background: #1a1a1a; color: #ff6b6b; padding: 10px; font-family: monospace; margin: 10px 0; border-radius: 4px;">
+          Stripe каже: <%= @stripe_error %>
+        </div>
+      <% end %>
+      <%= link_to "ПОВЕРНУТИСЬ В ПРОФІЛЬ", profile_path, class: "btn-outline" %>
+    </div>
+  <% end %>
 
   </div>
 </div>

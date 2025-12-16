@@ -13,25 +13,28 @@ class OrdersController < ApplicationController
     @cart = current_user.cart
     @order = Order.new(order_params)
     @order.user = current_user
-    @order.total_price = @cart.total_price
+    @order.total_price = @cart.total_price # Припустимо, ви зберігаєте total_price
 
     ActiveRecord::Base.transaction do
       if @order.save
         @cart.cart_items.each do |ci|
+          # Зберігаємо дані про товар і ціну на момент замовлення
           OrderItem.create!(
             order: @order,
             item: ci.item,
             quantity: ci.quantity,
-            # price: ci.item.price_at_purchase
+            price_at_purchase: ci.item.price # Фіксуємо поточну ціну
           )
 
           item = ci.item
           new_quantity = item.quantity - ci.quantity
 
           if new_quantity < 0
+            # Відкат транзакції, якщо недостатньо товару
             raise ActiveRecord::Rollback, "Недостатньо товару #{item.name} на складі"
           end
 
+          # СПИСАННЯ ТОВАРУ З ІНВЕНТАРЮ ВІДБУВАЄТЬСЯ ТУТ
           item.update!(quantity: new_quantity)
         end
 
@@ -46,61 +49,84 @@ class OrdersController < ApplicationController
     redirect_to cart_path, alert: e.message
   end
 
-  private
-
-  def order_params
-    params.require(:order).permit(:full_name, :address, :phone, :payment_method)
-  end
-
   def payment
     @order = current_user.orders.find_by(id: params[:id])
+    @session = nil # Ініціалізуємо nil
+
+    @debug_info = {
+      order_id: params[:id],
+      order_found: @order.present?,
+      stripe_key_present: ENV['STRIPE_SECRET_KEY'].present?,
+      stripe_key_start: ENV['STRIPE_SECRET_KEY']&.first(7)
+    }
+
     if @order && @order.order_items.any?
       begin
         @session = Stripe::Checkout::Session.create({
-          payment_method_types: [ "card" ],
-          line_items: @order.order_items.map { |oi|
+          payment_method_types: ['card'],
+          line_items: @order.order_items.map { |oi| 
             {
               price_data: {
-                currency: "uah",
-                product_data: { name: oi.item.name },
-                unit_amount: (oi.price_at_purchase.to_f * 100).to_i
+                currency: 'uah',
+                product_data: { 
+                  name: oi.item.name,
+                  description: "Музичний інструмент від FunMetalThings"
+                },
+                # Множимо на 100 і округлюємо для Stripe
+                unit_amount: (oi.price_at_purchase.to_f * 100).round,
               },
-              quantity: oi.quantity
+              quantity: oi.quantity,
             }
           },
-          mode: "payment",
+          mode: 'payment',
           success_url: confirm_payment_order_url(@order) + "?session_id={CHECKOUT_SESSION_ID}",
-          cancel_url: payment_order_url(@order)
+          cancel_url: payment_order_url(@order),
         })
       rescue Stripe::StripeError => e
-        @debug_info[:stripe_error] = e.message
+        logger.error "STRIPE API ERROR: #{e.message}"
+        @stripe_error = e.message
+        @session = nil # Залишаємо @session nil при помилці
       end
     end
+    # Rails автоматично рендерить app/views/orders/payment.html.erb
   end
 
   def confirm_payment
     @order = Order.find(params[:id])
-    @cart = current_user.cart
-
-    ActiveRecord::Base.transaction do
-      # Списання товару (Вимога 3.1.2)
-      @cart.cart_items.each do |ci|
-        OrderItem.create!(order: @order, item: ci.item, quantity: ci.quantity, price: ci.item.price)
-        ci.item.update!(quantity: ci.item.quantity - ci.quantity)
+    
+    begin
+      # 1. ПЕРЕВІРКА СЕСІЇ STRIPE (Security)
+      session = Stripe::Checkout::Session.retrieve(params[:session_id])
+    
+      if session.payment_status == 'paid' && @order.status == 'pending'
+        ActiveRecord::Base.transaction do
+          # 2. ОНОВЛЕННЯ СТАТУСУ (Товар вже списано в 'create')
+          @order.update!(status: "paid")
+          
+          # 3. ОЧИЩЕННЯ КОШИКА (Навіть якщо він був порожнім)
+          current_user.cart.cart_items.destroy_all 
+        end
+        redirect_to order_path(@order), notice: "Оплата пройшла успішно! 🤘"
+      else
+        # Якщо статус не paid або замовлення вже було оброблене
+        redirect_to order_path(@order), alert: "Оплата не підтверджена або замовлення вже оброблене."
       end
-
-      @order.update!(status: "paid")
-      @cart.cart_items.destroy_all
+    rescue Stripe::InvalidRequestError => e
+      logger.error "STRIPE CONFIRM ERROR: #{e.message}"
+      redirect_to profile_path, alert: "Помилка: Невірний ID платіжної сесії. #{e.message}"
     end
-
-    redirect_to order_path(@order), notice: "Оплата пройшла успішно! 🤘"
   end
 
   def show
       @order = current_user.orders.find(params[:id])
-
       @order_items = @order.order_items.includes(:item)
   rescue ActiveRecord::RecordNotFound
     redirect_to profile_path, alert: "Замовлення не знайдено."
+  end
+
+  private
+
+  def order_params
+    params.require(:order).permit(:full_name, :address, :phone, :payment_method)
   end
 end

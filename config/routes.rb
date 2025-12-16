@@ -14,11 +14,10 @@ Rails.application.routes.draw do
   resource :profile, only: [ :show, :edit, :update ]
 
   # Order routes + payment
-  resources :orders, only: [ :new, :create, :show, :index ]
-  resources :orders, only: [ :new, :create, :show, :index ] do
+resources :orders, only: [:new, :create, :show] do
     member do
-      get :payment
-      patch :confirm_payment
+      get 'payment', as: 'payment' 
+      get 'confirm_payment' 
     end
   end
   # Admin routes

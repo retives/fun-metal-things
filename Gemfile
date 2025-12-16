@@ -36,6 +36,8 @@ gem "postgresql"
 gem "ransack"
 gem "stripe"
 gem "dotenv-rails"
+gem "active_storage_validations"
+gem "ruby-vips"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 

@@ -1,5 +1,8 @@
 class Item < ApplicationRecord
   has_one_attached :image
+  validates :image,
+            content_type: [ :png, :jpg, :jpeg ],
+            size: { less_than: 5.megabytes, message: "занадто велике (макс. 5МБ)" }
 
 
   has_many :taggings, dependent: :destroy

@@ -36,8 +36,17 @@ test:
 # Store production database in the storage/ directory, which by default
 # is mounted as a persistent Docker volume in config/deploy.yml.
 production:
-  adapter: postgresql
-  encoding: unicode
-  # Render автоматично підставляє DATABASE_URL, тому додаткові поля (user, password) не потрібні
-  url: <%= ENV['DATABASE_URL'] %>
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  primary: &primary_production
+    adapter: postgresql
+    url: <%= ENV['DATABASE_URL'] %>
+  
+  # Додаємо ці секції для Rails 8
+  cable:
+    <<: *primary_production
+    migrations_paths: db/cable_migrate
+  cache:
+    <<: *primary_production
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *primary_production
+    migrations_paths: db/queue_migrate

@@ -1,77 +1,113 @@
-<div class="content-wrapper">
-  <div class="profile-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--dark-brown); padding-bottom: 20px;">
-    <h1>Мій профіль 🎸</h1>
-    <%= link_to "Редагувати дані", edit_profile_path, class: "btn-outline" %>
+<div class="max-w-7xl mx-auto px-4 py-10 md:py-16">
+  
+  <%# Хедер профілю %>
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10 border-b border-stone-800 pb-6">
+    <h1 class="text-3xl md:text-4xl font-black uppercase tracking-tighter">Мій профіль 🎸</h1>
+    <%= link_to "Редагувати дані", edit_profile_path, class: "px-6 py-2 border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold rounded-full transition-all text-sm uppercase tracking-widest" %>
   </div>
 
-  <div class="profile-grid" style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;">
+  <%# Головна сітка: на мобілці колонка, на десктопі 1:2 %>
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8 items-start">
     
-    <aside class="profile-info-card" style="background: #2b2724; padding: 25px; border-radius: 12px; border: 1px solid var(--muted);">
-      <h3 style="color: var(--primary); margin-top: 0;">Контактна інформація</h3>
-      <p><strong>Email:</strong> <%= current_user.email %></p>
-      <p><strong>Ім'я:</strong> <%= @profile.first_name.presence || "Не вказано" %></p>
-      <p><strong>Прізвище:</strong> <%= @profile.last_name.presence || "Не вказано" %></p>
-      <p><strong>Телефон:</strong> <%= @profile.phone_number.presence || "Не вказано" %></p>
-      <p><strong>Роль:</strong> <span class="badge"><%= current_user.role.capitalize %></span></p> 
+    <%# ЛІВА КАРТКА: Контакти %>
+    <aside class="bg-stone-900 p-6 md:p-8 rounded-2xl border border-stone-800 shadow-xl sticky top-24">
+      <h3 class="text-primary font-black uppercase text-lg mb-6 tracking-wide">Контактна інформація</h3>
       
-      <div style="margin-top: 30px; border-top: 1px solid var(--dark-brown); padding-top: 20px;">
-        <%= link_to "Змінити пароль", edit_user_registration_path, style: "color: var(--primary); font-size: 0.9rem;" %> 
+      <div class="space-y-4 text-sm">
+        <div class="flex flex-col gap-1">
+          <span class="text-stone-500 uppercase text-[10px] font-bold">Email</span>
+          <span class="text-white font-medium truncate"><%= current_user.email %></span>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1">
+            <span class="text-stone-500 uppercase text-[10px] font-bold">Ім'я</span>
+            <span class="text-stone-200"><%= @profile.first_name.presence || "—" %></span>
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="text-stone-500 uppercase text-[10px] font-bold">Прізвище</span>
+            <span class="text-stone-200"><%= @profile.last_name.presence || "—" %></span>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <span class="text-stone-500 uppercase text-[10px] font-bold">Телефон</span>
+          <span class="text-stone-200 font-mono"><%= @profile.phone_number.presence || "—" %></span>
+        </div>
+
+        <div class="pt-2">
+          <span class="px-3 py-1 bg-stone-800 border border-stone-700 text-stone-400 text-[10px] font-black rounded uppercase tracking-widest">
+            <%= current_user.role %>
+          </span>
+        </div>
+      </div>
+      
+      <div class="mt-8 pt-6 border-t border-stone-800">
+        <%= link_to "Змінити пароль", edit_user_registration_path, class: "text-primary/70 hover:text-primary text-xs font-bold transition-colors uppercase" %> 
       </div>
     </aside>
 
-    <section class="profile-activity">
-      <div style="margin-bottom: 40px;">
-        <h3 style="border-left: 4px solid var(--primary); padding-left: 15px;">Мої замовлення</h3>
+    <%# ПРАВА ЧАСТИНА: Активність %>
+    <section class="space-y-12">
+      
+      <%# Секція замовлень %>
+      <div>
+        <h3 class="text-xl font-black uppercase mb-6 border-l-4 border-primary pl-4 tracking-tight">Мої замовлення</h3>
+        
         <% if @orders.any? %>
-          <div class="orders-history">
+          <div class="space-y-4">
             <% @orders.each do |order| %>
-              <div class="item-card" style="margin-bottom: 20px; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+              <div class="bg-stone-900/50 p-5 md:p-6 rounded-2xl border border-stone-800 hover:border-stone-700 transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
                 
-                <div>
-                  <h3 style="margin: 0; color: var(--primary);">ЗАМОВЛЕННЯ №<%= order.id.to_s.first(8).upcase %></h3>
-                  <p style="margin: 5px 0; font-size: 0.9rem; color: var(--muted);">
-                    Дата: <%= order.created_at.strftime("%d.%m.%Y") %> | 
-                    Статус: <span class="status-badge <%= order.status %>"><%= order.status.upcase %></span>
+                <div class="space-y-1">
+                  <div class="flex items-center gap-3">
+                    <h4 class="text-primary font-black text-sm md:text-base">№<%= order.id.to_s.first(8).upcase %></h4>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-stone-800 text-stone-400 border border-stone-700 uppercase">
+                      <%= order.status %>
+                    </span>
+                  </div>
+                  <p class="text-xs text-stone-500">
+                    Дата: <%= order.created_at.strftime("%d.%m.%Y") %>
                   </p>
-                  <p style="margin: 0; font-weight: bold;"><%= number_to_currency(order.total_amount, unit: "₴") %></p>
+                  <p class="text-lg font-bold text-white mt-2">
+                    <%= number_to_currency(order.total_price, unit: "₴") %>
+                  </p>
                 </div>
 
-                <div style="display: flex; gap: 10px;">
-                  <%= link_to "Переглянути", order_path(order), class: "btn-outline", style: "padding: 8px 15px; font-size: 0.8rem;" %>
-                  <% if order.pending? %>
+                <div class="flex gap-3 w-full sm:w-auto">
+                  <%= link_to "Деталі", order_path(order), class: "flex-1 sm:flex-none text-center px-4 py-2 bg-stone-800 hover:bg-stone-700 text-white text-xs font-bold rounded-lg transition-colors" %>
+                  <% if order.status == 'pending' %>
                     <%= link_to "ОПЛАТИТИ 💳", payment_order_path(order), 
-                        class: "btn-primary", 
-                        style: "padding: 8px 15px; font-size: 0.8rem; box-shadow: 0 0 10px rgba(207, 109, 55, 0.4);" %>
+                        class: "flex-1 sm:flex-none text-center px-4 py-2 bg-primary hover:bg-primary-dark text-white text-xs font-bold rounded-lg shadow-lg shadow-primary/20 transition-all animate-pulse hover:animate-none" %>
                   <% end %>
                 </div>
-
               </div>
             <% end %>
           </div>
-
-          <style>
-            .status-badge { padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
-            .status-badge.pending { background: #555; color: #fff; }
-            .status-badge.paid { background: #2e7d32; color: #fff; }
-            .status-badge.shipped { background: var(--primary); color: #fff; }
-          </style>
         <% else %>
-          <p style="color: var(--muted);">Ви ще не робили замовлень. </p>
+          <div class="p-10 border-2 border-dashed border-stone-800 rounded-3xl text-center">
+            <p class="text-stone-600 text-sm italic">Ви ще не робили замовлень. Пора щось придбати! 🎸</p>
+          </div>
         <% end %>
       </div>
 
+      <%# Секція відгуків %>
       <div>
-        <h3 style="border-left: 4px solid var(--primary); padding-left: 15px;">Мої відгуки</h3>
+        <h3 class="text-xl font-black uppercase mb-6 border-l-4 border-primary pl-4 tracking-tight">Мої відгуки</h3>
         <% if @reviews.any? %>
-          <% @reviews.each do |review| %>
-            <div style="background: #2b2724; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
-              <strong><%= review.item.name %></strong>
-              <span style="color: var(--primary); float: right;"><%= "★" * review.rating %></span>
-              <p style="margin-top: 10px; font-style: italic;"><%= review.comment %></p>
-            </div>
-          <% end %>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <% @reviews.each do |review| %>
+              <div class="bg-stone-900 p-5 rounded-2xl border border-stone-800 flex flex-col">
+                <div class="flex justify-between items-start mb-4">
+                  <strong class="text-white text-sm leading-tight max-w-[70%]"><%= review.item.name %></strong>
+                  <span class="text-primary text-xs tracking-tighter"><%= "★" * review.rating %></span>
+                </div>
+                <p class="text-stone-400 text-xs italic leading-relaxed flex-grow">"<%= review.comment %>"</p>
+              </div>
+            <% end %>
+          </div>
         <% else %>
-          <p style="color: var(--muted);">Ви ще не залишили жодного відгуку. </p>
+          <p class="text-stone-600 text-sm italic px-4">Ви ще не залишили жодного відгуку.</p>
         <% end %>
       </div>
     </section>

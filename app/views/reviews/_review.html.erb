@@ -1,0 +1,19 @@
+<%# app/views/reviews/_review.html.erb %>
+<div class="bg-stone-900 p-6 rounded-xl border-l-4 border-primary shadow-md mb-4">
+  <div class="flex justify-between items-center mb-3">
+    <strong class="text-stone-200 font-medium">
+      <%= review.user.email.split('@').first %>
+    </strong>
+    <span class="text-primary font-bold tracking-widest">
+      <%= "★" * review.rating %>
+    </span>
+  </div>
+  
+  <p class="text-stone-400 leading-relaxed">
+    <%= review.details %> <%# Зверни увагу: переконайся, що в БД це comment або details %>
+  </p>
+  
+  <time class="block mt-4 text-xs text-stone-500 uppercase tracking-wider">
+    Опубліковано: <%= review.created_at.strftime("%d.%m.%Y") %>
+  </time>
+</div>

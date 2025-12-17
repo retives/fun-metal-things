@@ -1,103 +1,68 @@
-<div class="content-wrapper">
-  <div class="page-actions" style="margin-bottom: 20px;">
-    <%= link_to '← Назад до каталогу', items_path, class: "nav-link admin-link" %>
+<div class="max-w-6xl mx-auto px-4 py-8">
+  <%# Кнопка назад %>
+  <div class="mb-6">
+    <%= link_to items_path, class: "flex items-center text-primary hover:underline transition-all" do %>
+      <span class="mr-2">←</span> Назад до каталогу
+    <% end %>
   </div>
 
-  <div class="item-detail-container">
-    <div class="item-visuals">
-      <div class="item-thumb">
-        <% if @item.image.attached? %>
-          <%= image_tag @item.image, class: "logo-img" %>
-        <% else %>
-          <div style="text-align: center; color: var(--muted);">
-            <span style="font-size: 4rem;">🎸</span>
-            <p>Зображення очікується</p>
-          </div>
-        <% end %>
-      </div>
+  <%# Головний контейнер товару %>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-stone-800 p-6 md:p-10 rounded-2xl border border-stone-700 shadow-xl">
+    
+    <%# Візуальна частина %>
+    <div class="flex items-center justify-center bg-stone-900 rounded-xl min-h-[400px] border border-stone-700 p-4">
+      <% if @item.image.attached? %>
+        <%= image_tag @item.image, class: "max-w-full h-auto rounded-lg shadow-2xl" %>
+      <% else %>
+        <div class="text-center text-stone-500">
+          <span class="text-6xl mb-4 block">🎸</span>
+          <p class="uppercase tracking-widest text-sm">Зображення очікується</p>
+        </div>
+      <% end %>
     </div>
 
-    <div class="item-content">
-      <h1 class="item-title"><%= @item.name %></h1>
-
-      <div>
+    <%# Контентна частина %>
+    <div class="flex flex-col">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4"><%= @item.name %></h1>
+      
+      <%# Теги %>
+      <div class="flex flex-wrap gap-2 mb-6">
         <% @item.tags.each do |tag| %>
-          <span class="tag-badge">#<%= tag.name %></span>
+          <span class="px-3 py-1 border border-primary text-primary text-xs font-mono rounded-full bg-primary/5">
+            #<%= tag.name %>
+          </span> 
         <% end %>
       </div>
 
-      <div class="item-description">
-        <%= @item.description %>
+      <div class="text-lg text-stone-400 mb-8 flex-grow leading-relaxed">
+        <%= @item.description %> 
       </div>
 
-      <div class="item-price-box">
-        <div class="price">
-          <%= number_to_currency(@item.price, unit: "₴", format: "%n %u") %>
+      <%# Блок ціни та дії %>
+      <div class="bg-stone-900/50 p-6 rounded-xl border border-primary/30">
+        <div class="text-4xl font-mono text-white mb-4">
+          <%= number_to_currency(@item.price, unit: "₴", format: "%n %u") %> 
         </div>
 
-        <div class="item-availability">
-          <% if @item.is_available %>
-            <span class="status-available">● В наявності (<%= @item.quantity %> шт.)</span>
-          <% else %>
-            <span class="status-unavailable">● Тимчасово відсутній</span>
-          <% end %>
+        <div class="mb-6 flex items-center gap-2">
+          <span class="<%= @item.is_available ? 'text-green-500' : 'text-primary' %> text-lg">●</span>
+          <span class="text-stone-300">
+            <%= @item.is_available ? "В наявності (#{@item.quantity} шт.)" : "Тимчасово відсутній" %>
+          </span>
         </div>
 
         <% if @item.is_available %>
-          <%= button_to cart_items_path(item_id: @item.id), method: :post, class: "btn-primary btn-block", data: { turbo: false } do %>
-            <span>ДОДАТИ В КОШИК</span> 🛒
+          <%= button_to cart_items_path(item_id: @item.id), 
+                        method: :post, 
+                        class: "w-full py-4 bg-primary hover:bg-primary-dark text-white font-bold rounded-lg transition-colors flex justify-center items-center gap-2 tracking-widest",
+                        data: { turbo: false } do %>
+            ДОДАТИ В КОШИК 🛒
           <% end %>
         <% end %>
       </div>
     </div>
   </div>
 
-  <%# Секція відгуків (Вимога 3.1.8) %>
-<%# Секція відгуків %>
-<div class="reviews-container">
-  <h2 class="reviews-title">ВІДГУКИ ТА ВРАЖЕННЯ 🎸</h2>
-
-  <% if user_signed_in? %>
-    <%# Форма створення відгуку %>
-    <div class="item-card" style="padding: 20px; margin-bottom: 40px; background: #2b2724;">
-      <h4 style="margin-top: 0;">Залишити свій відгук:</h4>
-      <%= form_with(model: [ @item, @item.reviews.build ], local: true) do |f| %>
-        
-        <div>
-          <%= f.label :rating, "Ваша оцінка:", class: "form-label" %>
-          <%= f.select :rating, (1..5).to_a.reverse.map { |n| ["#{n} ★", n] }, {}, { class: "form-control form-control--select" } %>
-        </div>
-
-        <div>
-          <%= f.text_area :comment, placeholder: "Напишіть ваші враження від інструменту...", class: "form-control" %>
-        </div>
-
-        <%= f.submit "ОПУБЛІКУВАТИ", class: "btn-primary" %>
-      <% end %>
-    </div>
-  <% else %>
-    <p style="background: rgba(207, 109, 55, 0.1); padding: 15px; border-radius: 8px; border: 1px dashed var(--primary); text-align: center;">
-      Тільки авторизовані рок-фанати можуть залишати відгуки. <%= link_to "Увійти", new_user_session_path, style: "color: var(--primary); font-weight: bold;" %>
-    </p>
-  <% end %>
-
-  <div class="reviews-list">
-    <% if @item.reviews.any? %>
-      <% @item.reviews.order(created_at: :desc).each do |review| %>
-          <% if review.persisted? %>
-          <div class="review-card">
-            <div class="review-meta">
-              <strong><%= review.user.email.split('@').first %></strong>
-              <span class="status-available"><%= "★" * review.rating %></span>
-            </div>
-            <p class="review-text"><%= review.details %></p>
-            <small class="muted" style="display: block; margin-top: 10px;">Опубліковано: <%= review.created_at.strftime("%d.%m.%Y") %></small>
-          </div>
-        <% end %>
-      <% end %>
-    <% else %>
-      <p style="color: var(--muted); text-align: center;">На цей товар ще немає відгуків. Станьте першим!</p>
-    <% end %>
-  </div>
-</div>
+  <%# Секція відгуків винесена в Partial для чистоти %>
+  <%= render 'reviews', item: @item %>
 </div>

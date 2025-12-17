@@ -1,0 +1,18 @@
+<div class="flex items-center gap-3 bg-stone-950 px-3 py-1.5 rounded-lg border border-stone-800 w-fit">
+  <%= button_to cart_item_path(cart_item, operation: 'decrement'), 
+              method: :patch, 
+              class: "text-primary text-xl font-black hover:scale-110 active:scale-90 transition-transform disabled:opacity-30", 
+              disabled: cart_item.quantity <= 1 do %>
+    −
+  <% end %>
+
+  <span class="font-mono font-bold text-white min-w-[24px] text-center">
+    <%= cart_item.quantity %>
+  </span>
+
+  <%= button_to cart_item_path(cart_item, operation: 'increment'), 
+              method: :patch, 
+              class: "text-primary text-xl font-black hover:scale-110 active:scale-90 transition-transform" do %>
+    +
+  <% end %>
+</div>

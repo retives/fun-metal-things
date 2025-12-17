@@ -1,42 +1,82 @@
-
-<% if @order.nil? %>
-  <p>Завантаження даних замовлення... Якщо сторінка не оновилась, перейдіть до профілю.</p>
-<% else %>
-  <div class="item-card">
-    <h1 class="page-title">ЧЕК №<%= @order.id.to_s.first(8).upcase %></h1>
-  </div>
-<% end %>
-<div class="content-wrapper content-wrapper--narrow">
-  <div class="item-card order-card--highlight">
-    
-    <%# Штамп статусу %>
-    <div class="order-stamp">ОПЛАЧЕНО 🤘</div>
-
-    <h1 class="section-title">ЧЕК №<%= @order.id.to_s.first(8).upcase %></h1>
-    <p class="muted">Дякуємо за довіру до FunMetalThings! Твоє замовлення вже готується до відправки.</p>
-
-    <div class="order-items">
-      <% @order.order_items.each do |oi| %>
-        <div class="order-item-row">
-          <span><%= oi.item.name %> (x<%= oi.quantity %>)</span>
-          <span class="price" style="font-weight: bold;"><%= number_to_currency(oi.price_at_purchase * oi.quantity, unit: "₴") %></span>
-        </div>
-      <% end %>
+<div class="max-w-[800px] mx-auto px-4 py-12 md:py-20 print:p-0">
+  
+  <% if @order.nil? %>
+    <div class="bg-stone-900 border border-stone-800 p-8 rounded-2xl text-center">
+      <p class="text-stone-400 animate-pulse">Завантаження даних замовлення...</p>
     </div>
+  <% else %>
 
-    <div style="text-align: right; margin-bottom: 30px;">
-      <h2 style="margin: 0;">РАЗОМ: <span class="price"><%= number_to_currency(@order.total_price, unit: "₴") %></span></h2>
+    <div class="bg-[#1a1a1a] p-8 md:p-12 rounded-3xl border-3 <%= @order.paid? ? 'border-primary' : 'border-stone-700' %> relative overflow-hidden shadow-2xl print:border-stone-300 print:shadow-none">
+      
+      <%# Штамп статусу %>
+       <% if @order.paid? %>
+    <div class="absolute top-2 -right-2 sm:top-8 sm:right-4 md:top-10 md:right-10 
+                border-2 md:border-4 border-green-500 text-green-500 
+                px-2 py-1 md:px-6 md:py-3 rounded md:rounded-xl 
+                rotate-[15deg] font-black text-[10px] sm:text-xl md:text-3xl 
+                uppercase tracking-tighter z-20 bg-[#1a1a1a] shadow-lg sm:shadow-none">
+      ОПЛАЧЕНО
     </div>
+  <% else %>
+    <div class="absolute top-2 -right-2 sm:top-8 sm:right-4 md:top-10 md:right-10 
+                border-2 md:border-4 border-amber-500 text-amber-500 
+                px-2 py-1 md:px-6 md:py-3 rounded md:rounded-xl 
+                rotate-[-10deg] font-black text-[9px] sm:text-lg md:text-2xl 
+                uppercase tracking-tighter z-20 bg-[#1a1a1a] shadow-lg sm:shadow-none">
+      ОЧІКУЄ ОПЛАТИ
+    </div>
+  <% end %>
 
-    <div class="order-info">
-      <p><strong>Отримувач:</strong> <%= @order.full_name %></p>
-      <p><strong>Адреса:</strong> <%= @order.address %></p>
-      <p><strong>Телефон:</strong> <%= @order.phone %></p>
-    </div>
+      <%# Шапка чека %>
+      <header class="mb-10">
+        <h1 class="<%= @order.paid? ? 'text-primary' : 'text-stone-300' %> text-2xl md:text-4xl font-black uppercase mb-2">
+          ЧЕК №<%= @order.id.to_s.first(8).upcase %>
+        </h1>
+        <p class="text-stone-500 text-sm md:text-base leading-relaxed max-w-md print:text-stone-700">
+          <% if @order.paid? %>
+            Дякуємо за довіру! Твоє замовлення вже готується до відправки.
+          <% else %>
+            Замовлення зафіксовано. Для того, щоб ми почали підготовку, будь ласка, завершіть оплату.
+          <% end %>
+        </p>
+      </header>
 
-    <div class="action-row">
-      <%= link_to "НА ГОЛОВНУ", root_path, class: "btn-primary btn-block" %>
-      <button onclick="window.print();" class="btn-outline">ДРУКУВАТИ ЧЕК 🖨️</button>
+      <%# Список товарів %>
+      <div class="my-10 border-y border-dashed border-stone-700 py-6 space-y-4 print:border-stone-300">
+        <% @order.order_items.each do |oi| %>
+          <div class="flex justify-between items-center gap-4">
+            <span class="text-stone-300 print:text-black text-sm md:text-base"><%= oi.item.name %> (x<%= oi.quantity %>)</span>
+            <span class="font-bold text-white print:text-black font-mono">
+              <%= number_to_currency(oi.price_at_purchase * oi.quantity, unit: "₴") %>
+            </span>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="text-right mb-10">
+        <h2 class="text-3xl md:text-5xl font-black text-primary">
+          РАЗОМ: <%= number_to_currency(@order.total_price, unit: "₴") %>
+        </h2>
+      </div>
+
+      <%# Деталі доставки %>
+      <div class="bg-stone-900/50 p-6 rounded-2xl border border-stone-800 text-sm space-y-3 print:bg-stone-100 print:border-stone-200">
+        <p><strong class="text-stone-500 uppercase mr-2">Отримувач:</strong> <span class="text-stone-200 print:text-black"><%= @order.full_name %></span></p>
+        <p><strong class="text-stone-500 uppercase mr-2">Адреса:</strong> <span class="text-stone-200 print:text-black"><%= @order.address %></span></p>
+        <p><strong class="text-stone-500 uppercase mr-2">Телефон:</strong> <span class="text-stone-200 print:text-black font-mono"><%= @order.phone %></span></p>
+      </div>
+
+      <%# Кнопки дії %>
+      <div class="mt-10 flex flex-col sm:flex-row gap-4 print:hidden">
+        <% if @order.paid? %>
+          <%= link_to "НА ГОЛОВНУ", root_path, class: "btn-primary flex-1 !py-4 text-center no-underline" %>
+          <button onclick="window.print();" class="flex-1 px-6 py-4 border-2 border-stone-700 hover:border-primary text-stone-400 hover:text-white rounded-xl font-bold transition-all cursor-pointer uppercase text-xs">ДРУКУВАТИ ЧЕК 🖨️</button>
+        <% else %>
+          <%= link_to "ПЕРЕЙТИ ДО ОПЛАТИ 💳", payment_order_path(@order), class: "btn-primary flex-1 !py-4 text-center no-underline shadow-[0_0_20px_rgba(207,109,55,0.4)] animate-pulse" %>
+          <%= link_to "В ПРОФІЛЬ", profile_path, class: "flex-1 px-6 py-4 border-2 border-stone-700 text-stone-400 text-center font-bold rounded-xl text-xs flex items-center justify-center" %>
+        <% end %>
+      </div>
+
     </div>
-  </div>
+  <% end %>
 </div>

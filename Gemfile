@@ -29,9 +29,7 @@ gem "solid_queue"
 gem "solid_cable"
 
 gem "devise"
-gem "bootstrap"
 gem "image_processing"
-gem "dartsass-rails"
 gem "postgresql"
 gem "ransack"
 gem "stripe"
@@ -71,3 +69,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "tailwindcss-rails"

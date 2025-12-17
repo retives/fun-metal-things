@@ -1,47 +1,70 @@
-<div class="content-wrapper" style="max-width: 600px; margin: 50px auto; text-align: center;">
-  <div class="item-card" style="padding: 40px; border: 2px solid var(--primary); background: #2b2724;"> 
+<div class="max-w-xl mx-auto px-4 py-12 md:py-20 text-center">
+  <div class="bg-stone-900 p-8 md:p-12 rounded-2xl border-2 border-primary shadow-[0_0_50px_rgba(207,109,55,0.1)]">
+    
     <% if @order.present? && @session.present? %>
-      <h2 style="color: var(--primary); margin-bottom: 20px;">ПЕРЕХІД ДО ОПЛАТИ 💳</h2>
+      <h2 class="text-primary text-2xl md:text-3xl font-black uppercase tracking-widest mb-8">
+        ПЕРЕХІД ДО ОПЛАТИ 💳
+      </h2>
       
-      <div style="background: #332f2c; padding: 20px; border-radius: 8px; margin-bottom: 30px; text-align: left; border-left: 4px solid var(--primary);">
-        <p><strong>Замовлення:</strong> №<%= @order.id.to_s.first(8).upcase %></p>
-        <p><strong>Сума до сплати:</strong> <span style="color: var(--primary); font-size: 1.2rem; font-weight: bold;">
-          <%= number_to_currency(@order.total_price, unit: "₴") %>
-        </span></p>
+      <div class="bg-stone-800 p-6 rounded-xl mb-10 text-left border-l-4 border-primary">
+        <div class="flex justify-between items-center mb-4">
+          <span class="text-stone-500 text-xs uppercase font-bold">Номер замовлення:</span>
+          <span class="text-white font-mono font-bold">#<%= @order.id.to_s.first(8).upcase %></span>
+        </div>
+        
+        <div class="flex justify-between items-center">
+          <span class="text-stone-500 text-xs uppercase font-bold">Сума до сплати:</span>
+          <span class="text-primary text-2xl font-black">
+            <%= number_to_currency(@order.total_price, unit: "₴") %>
+          </span>
+        </div>
       </div>
 
-      <p style="color: var(--muted); margin-bottom: 25px; font-size: 0.9rem;">
-        Натиснувши кнопку нижче, ви будете перенаправлені на захищену сторінку Stripe.
+      <p class="text-stone-400 mb-8 text-sm leading-relaxed">
+        Натиснувши кнопку нижче, ви будете перенаправлені на захищену сторінку <span class="text-indigo-400 font-bold italic">Stripe</span> для завершення транзакції.
       </p>
 
-      <button id="checkout-button" class="btn-primary" style="width: 100%; padding: 18px; font-size: 1.2rem; letter-spacing: 1px;">
+      <button id="checkout-button" class="btn-primary w-full py-5 text-xl tracking-widest shadow-xl transition-all hover:scale-[1.02] active:scale-95">
         ОПЛАТИТИ ЧЕРЕЗ STRIPE
       </button>
 
+      <%# JavaScript для Stripe %>
       <script src="https://js.stripe.com/v3/"></script>
       <script>
-        var stripe = Stripe('<%= Rails.application.credentials.dig(:stripe, :publishable_key) || ENV['STRIPE_PUBLISHABLE_KEY'] %>');
-        var checkoutButton = document.getElementById('checkout-button');
+        document.addEventListener('turbo:load', function() {
+          var stripe = Stripe('<%= Rails.application.credentials.dig(:stripe, :publishable_key) || ENV['STRIPE_PUBLISHABLE_KEY'] %>');
+          var checkoutButton = document.getElementById('checkout-button');
 
-        checkoutButton.addEventListener('click', function() {
-          stripe.redirectToCheckout({
-            sessionId: '<%= @session.id %>'
-          });
+          if (checkoutButton) {
+            checkoutButton.addEventListener('click', function() {
+              stripe.redirectToCheckout({
+                sessionId: '<%= @session.id %>'
+              });
+            });
+          }
         });
       </script>
 
     <% else %>
-    <div style="padding: 20px; border: 1px dashed red; background: rgba(255,0,0,0.05);">
-      <h3 style="color: #ff4500;">Помилка ініціалізації оплати</h3>
-      
-      <% if @stripe_error %>
-        <div style="background: #1a1a1a; color: #ff6b6b; padding: 10px; font-family: monospace; margin: 10px 0; border-radius: 4px;">
-          Stripe каже: <%= @stripe_error %>
-        </div>
-      <% end %>
-      <%= link_to "ПОВЕРНУТИСЬ В ПРОФІЛЬ", profile_path, class: "btn-outline" %>
-    </div>
-  <% end %>
+      <div class="p-6 border-2 border-dashed border-red-500/50 bg-red-500/5 rounded-xl">
+        <h3 class="text-red-500 font-black text-xl mb-4 uppercase">Помилка ініціалізації оплати</h3>
+        
+        <% if @stripe_error %>
+          <div class="bg-stone-950 text-red-400 p-4 font-mono text-xs mb-6 rounded border border-red-500/20 break-words">
+            Stripe error: <%= @stripe_error %>
+          </div>
+        <% end %>
 
+        <%= link_to profile_path, class: "inline-flex items-center gap-2 text-stone-400 hover:text-white transition-colors uppercase font-bold text-sm" do %>
+          ← ПОВЕРНУТИСЬ В ПРОФІЛЬ
+        <% end %>
+      </div>
+    <% end %>
+
+  </div>
+
+  <div class="mt-8 flex justify-center gap-6 opacity-40 grayscale">
+    <span class="text-xs font-bold text-stone-500 uppercase">Secure Payment by Stripe</span>
+    <%# Можна додати логотипи Visa/Mastercard тут %>
   </div>
 </div>

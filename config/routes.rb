@@ -16,19 +16,19 @@ Rails.application.routes.draw do
   # Profile routes
   resource :profile, only: [ :show, :edit, :update ]
 
-  # Order routes + payment
-resources :orders, only: [:new, :create, :show] do
+# Order routes + payment
+resources :orders, only: [ :new, :create, :show ] do
     member do
-      get 'payment', as: 'payment' 
-      get 'confirm_payment' 
+      get "payment", as: "payment"
+      get "confirm_payment"
     end
   end
   # Admin routes
   namespace :admin do
     resources :items
-    resources :orders, only: [:index, :show]
-    resources :tags # Це посилання на ваш новий scaffold_controller
-    root to: "items#index"
+    resources :orders, only: [ :index, :show ]
+    resources :tags
+    root to: "dashboard#index"
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

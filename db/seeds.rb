@@ -59,36 +59,6 @@ merch.each { |i| i.tags << Tag.find_by(name: 'Мерч') }
 drums = Item.create!(name: 'Tama Speed Cobra 910', price: 15000, quantity: 2, description: 'Подвійна педаль для екстремальної швидкості.', is_available: true)
 drums.tags << Tag.find_by(name: 'Барабани')
 
-# 5. Кошик (Carts) [cite: 72, 168-170]
-puts "Filling Carts..."
-[admin, client].each do |user|
-  cart = user.cart
-  3.times do
-    item = Item.all.sample
-    CartItem.create!(cart: cart, item: item, quantity: rand(1..2))
-  end
-end
-
-# 6. Замовлення та оплата (Orders & Payments) [cite: 73, 177, 183-186]
-puts "Creating Orders..."
-order1 = Order.create!(
-  user: client,
-  total_price: 43800,
-  status: 'delivered',
-  created_at: 2.days.ago
-)
-OrderItem.create!(order: order1, item: guitars.first, quantity: 1, price_at_purchase: 42000)
-OrderItem.create!(order: order1, item: merch.first, quantity: 1, price_at_purchase: 1800)
-Payment.create!(order: order1, total_price: 43800, status: 'completed')
-
-order2 = Order.create!(
-  user: client,
-  total_price: 850,
-  status: 'processing',
-  created_at: 1.hour.ago
-)
-OrderItem.create!(order: order2, item: merch.second, quantity: 1, price_at_purchase: 850)
-Payment.create!(order: order2, total_price: 850, status: 'pending')
 
 # 7. Відгуки (Reviews) [cite: 75, 191, 194]
 puts "Creating Reviews..."

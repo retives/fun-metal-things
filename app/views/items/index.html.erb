@@ -1,52 +1,65 @@
-<div class="content-wrapper" style="display: grid; grid-template-columns: 250px 1fr; gap: 30px;">
+<div class="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto px-4 py-8">
   
-  <%# ЛІВА ПАНЕЛЬ: Фільтрація та Сортування %>
-  <aside class="filter-sidebar" style="background: #2b2724; padding: 20px; border-radius: 8px; border: 1px solid var(--dark-brown); height: fit-content;">
-    <%= search_form_for @q, url: items_path do |f| %>
-      <h3 style="color: var(--primary); margin-top: 0;">Сортувати</h3>
-      <div style="margin-bottom: 20px;">
-        <%= f.select :s, 
-            { 'Новинки' => 'created_at desc', 'Ціна: від дешевих' => 'price asc', 'Ціна: від дорогих' => 'price desc' }, 
-            {}, { onchange: 'this.form.submit();', style: "width: 100%; background: #332f2c; color: white; padding: 8px; border: 1px solid var(--muted);" } %>
-      </div>
+  <%# ЛІВА ПАНЕЛЬ: Фільтрація %>
+  <aside class="lg:w-64 shrink-0">
+    <div class="sticky top-6 bg-stone-900 p-6 rounded-2xl border border-stone-800 shadow-lg">
+      <%= search_form_for @q, url: items_path do |f| %>
+        <h3 class="text-primary font-bold uppercase tracking-wider text-sm mb-4">Сортувати</h3>
+        <div class="mb-6">
+          <%= f.select :s, 
+              { 'Новинки' => 'created_at desc', 'Ціна: від дешевих' => 'price asc', 'Ціна: від дорогих' => 'price desc' }, 
+              {}, { onchange: 'this.form.submit();', class: "w-full bg-stone-800 text-white border border-stone-700 rounded-lg p-2 text-sm focus:ring-1 focus:ring-primary outline-none" } %>
+        </div>
 
-      <h3 style="color: var(--primary);">Ціна</h3>
-      <div style="display: flex; gap: 5px; margin-bottom: 20px;">
-        <%= f.number_field :price_gteq, placeholder: "Від", style: "width: 50%; background: #332f2c; color: white; border: 1px solid var(--muted); padding: 5px;" %>
-        <%= f.number_field :price_lteq, placeholder: "До", style: "width: 50%; background: #332f2c; color: white; border: 1px solid var(--muted); padding: 5px;" %>
-      </div>
+        <h3 class="text-primary font-bold uppercase tracking-wider text-sm mb-4">Ціна</h3>
+        <div class="flex gap-2 mb-6">
+          <%= f.number_field :price_gteq, placeholder: "Від", class: "w-1/2 bg-stone-800 text-white border border-stone-700 rounded-lg p-2 text-sm" %>
+          <%= f.number_field :price_lteq, placeholder: "До", class: "w-1/2 bg-stone-800 text-white border border-stone-700 rounded-lg p-2 text-sm" %>
+        </div>
 
-      <h3 style="color: var(--primary);">Теги</h3>
-      <div style="max-height: 200px; overflow-y: auto; margin-bottom: 20px;">
-        <% Tag.all.each do |tag| %>
-          <label style="display: block; margin-bottom: 5px; font-size: 0.9rem;">
-            <%= check_box_tag "q[tags_id_in][]", tag.id, (params[:q][:tags_id_in].include?(tag.id) if params[:q] && params[:q][:tags_id_in]) %>
-            <%= tag.name %>
-          </label>
-        <% end %>
-      </div>
+        <h3 class="text-primary font-bold uppercase tracking-wider text-sm mb-4">Теги</h3>
+        <div class="max-h-48 overflow-y-auto space-y-2 mb-6 custom-scrollbar">
+          <% Tag.all.each do |tag| %>
+            <label class="flex items-center gap-3 text-stone-400 hover:text-white cursor-pointer transition-colors text-sm">
+              <%= check_box_tag "q[tags_id_in][]", tag.id, (params[:q][:tags_id_in].include?(tag.id.to_s) if params[:q] && params[:q][:tags_id_in]), class: "rounded border-stone-700 bg-stone-800 text-primary focus:ring-primary" %>
+              <%= tag.name %>
+            </label>
+          <% end %>
+        </div>
 
-      <%= f.submit "Застосувати", class: "btn-primary", style: "width: 100%;" %>
-      <%= link_to "Скинути", items_path, style: "display: block; text-align: center; margin-top: 10px; color: var(--muted); font-size: 0.8rem;" %>
-    <% end %>
+        <div class="space-y-3">
+          <%= f.submit "Застосувати", class: "w-full py-3 bg-primary hover:bg-primary-dark text-white font-bold rounded-lg transition-all cursor-pointer text-xs" %>
+          <%= link_to "Скинути фільтри", items_path, class: "block text-center text-stone-500 hover:text-stone-300 text-xs transition-colors" %>
+        </div>
+      <% end %>
+    </div>
   </aside>
 
-  <section>
-    <div style="margin-bottom: 30px;">
+  <%# ПРАВА ЧАСТИНА: Пошук та Товари %>
+  <section class="flex-1">
+    <%# Рядок пошуку %>
+    <div class="mb-8">
       <%= search_form_for @q, url: items_path do |f| %>
-        <div style="display: flex; gap: 10px;">
-          <%= f.search_field :name_cont, placeholder: "Пошук інструментів (напр. Gibson, Marshall...)", 
-              style: "flex: 1; padding: 15px; background: #2b2724; border: 2px solid var(--primary); color: white; border-radius: 6px; font-size: 1.1rem;" %>
-          <%= f.submit "ШУКАТИ 🔍", class: "btn-primary" %>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="relative flex-1">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-stone-500">🔍</span>
+            <%= f.search_field :name_cont, placeholder: "Пошук інструментів...", 
+                class: "w-full pl-11 pr-4 py-4 bg-stone-900 border-2 border-stone-800 focus:border-primary text-white rounded-xl outline-none transition-all placeholder:text-stone-600" %>
+          </div>
+          <%= f.submit "ШУКАТИ", class: "px-8 py-4 bg-primary text-white font-black rounded-xl hover:scale-105 transition-transform" %>
         </div>
       <% end %>
     </div>
 
-    <div class="items-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; align-items: stretch;">
+    <%# Сітка товарів %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
       <% if @items.any? %>
         <%= render @items %> 
       <% else %>
-        <p style="text-align: center; padding: 50px;">Нічого не знайдено за вашим запитом. 🤘</p>
+        <div class="col-span-full py-20 text-center bg-stone-900/50 rounded-3xl border border-dashed border-stone-800">
+          <span class="text-5xl block mb-4">🤘</span>
+          <p class="text-stone-500 text-lg font-medium">Нічого не знайдено за вашим запитом.</p>
+        </div>
       <% end %>
     </div>
   </section>

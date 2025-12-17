@@ -1,0 +1,21 @@
+<%# app/views/items/_reviews.html.erb %>
+<div class="mt-12 pt-8 border-t border-stone-800">
+  <h2 class="text-2xl text-primary font-bold mb-8 uppercase tracking-tighter">Відгуки та враження 🎸</h2>
+
+  <% if user_signed_in? %>
+    <%= render 'reviews/form', item: @item %>
+  <% else %>
+    <div class="p-8 border border-dashed border-primary/30 rounded-2xl text-center bg-stone-900/40">
+      <p class="text-stone-400">Тільки авторизовані рок-фанати можуть залишати відгуки.</p>
+      <%= link_to "Увійти", new_user_session_path, class: "inline-block mt-3 text-primary font-bold hover:scale-105 transition-transform" %>
+    </div>
+  <% end %>
+
+  <div class="mt-8">
+    <% if @item.reviews.any? %>
+      <%= render @item.reviews.order(created_at: :desc) %>
+    <% else %>
+      <p class="text-stone-500 text-center italic">На цей товар ще немає відгуків. Станьте першим!</p>
+    <% end %>
+  </div>
+</div>

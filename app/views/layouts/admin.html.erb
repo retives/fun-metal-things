@@ -1,52 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="uk" class="h-full">
   <head>
-    <title>FunMetalThings | Admin Panel</title>
+    <title>Admin Panel | FunMetalThings</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-    <style>
-      :root {
-        --admin-sidebar: #252220;
-      }
-      body { display: flex; min-height: 100vh; background-color: #1a1a1a; color: white; margin: 0; }
-      .admin-sidebar { 
-        width: 260px; background: var(--admin-sidebar); 
-        border-right: 2px solid var(--primary); padding: 20px;
-      }
-      .admin-main { flex: 1; padding: 40px; overflow-y: auto; }
-      .admin-nav-link {
-        display: block; padding: 12px; color: #ccc; text-decoration: none;
-        border-radius: 6px; margin-bottom: 5px; transition: 0.3s;
-      }
-      .admin-nav-link:hover, .admin-nav-link.active {
-        background: var(--primary); color: white;
-      }
-    </style>
   </head>
 
-  <body>
-    <aside class="admin-sidebar">
-      <h2 style="color: var(--primary); margin-bottom: 30px;">🤘 ADMIN</h2>
-      <nav>
-        <%= link_to "Головна (Stats)", admin_root_path, class: "admin-nav-link" %>
-        <%= link_to "Товари (Inventory)", admin_items_path, class: "admin-nav-link" %>
-        <%= link_to "Замовлення (Sales)", admin_orders_path, class: "admin-nav-link" %>
-        <hr style="border: 0; border-top: 1px solid #444; margin: 20px 0;">
-        <%= link_to "Повернутись на сайт", root_path, class: "admin-nav-link" %>
+  <%# Використовуємо flex-col для мобілок і lg:flex-row для десктопів %>
+  <body class="bg-[#1a1a1a] text-white min-h-screen flex flex-col lg:flex-row m-0 font-sans antialiased">
+
+    <%# БІЧНА ПАНЕЛЬ (Sidebar) %>
+    <aside class="w-full lg:w-64 bg-[#252220] border-b-2 lg:border-b-0 lg:border-r-2 border-primary p-5 shrink-0 z-50 lg:sticky lg:top-0 lg:h-screen">
+      <div class="flex items-center justify-between lg:block mb-4 lg:mb-10">
+        <h2 class="text-primary text-2xl font-black uppercase tracking-tighter">
+          🤘 ADMIN
+        </h2>
+        <%# Мітка для мобілок, щоб розуміти де ми %>
+        <span class="lg:hidden text-[10px] bg-primary/20 text-primary px-2 py-1 rounded font-bold uppercase">
+          Панель керування
+        </span>
+      </div>
+
+      <%# Навігація: на мобілці в ряд зі скролом, на десктопі стовпчиком %>
+      <nav class="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 scrollbar-hide">
+        <%= link_to admin_root_path, class: "admin-nav-item #{'active' if current_page?(admin_root_path)}" do %>
+          <span class="hidden lg:inline">📊</span> Головна
+        <% end %>
+
+        <%= link_to admin_items_path, class: "admin-nav-item #{'active' if current_page?(admin_items_path)}" do %>
+          <span class="hidden lg:inline">📦</span> Товари
+        <% end %>
+
+        <%= link_to admin_orders_path, class: "admin-nav-item #{'active' if current_page?(admin_orders_path)}" do %>
+          <span class="hidden lg:inline">💰</span> Продажі
+        <% end %>
+
+        <div class="hidden lg:block border-t border-stone-800 my-4"></div>
+
+        <%= link_to root_path, class: "shrink-0 lg:shrink-1 px-4 py-2 text-xs font-bold text-stone-500 hover:text-white transition-colors flex items-center gap-2" do %>
+          <span class="hidden lg:inline">←</span> Повернутись на сайт
+        <% end %>
       </nav>
     </aside>
 
-    <main class="admin-main">
+    <%# ОСНОВНИЙ КОНТЕНТ %>
+    <main class="flex-1 p-5 md:p-10 min-w-0 overflow-y-auto">
       <% flash.each do |type, msg| %>
-        <div class="alert alert-<%= type %>" style="padding: 15px; margin-bottom: 20px; border-radius: 8px; background: #333; border: 1px solid var(--primary);">
+        <div class="mb-6 p-4 rounded-xl bg-stone-900 border-l-4 border-primary text-stone-200 text-sm shadow-xl animate-fade-in">
           <%= msg %>
         </div>
       <% end %>
 
       <%= yield %>
     </main>
+
   </body>
 </html>

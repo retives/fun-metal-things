@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #CF6D37; 
+  --color-secondary: #A56847; 
+  --color-muted: #7A5B49;    
+  --color-dark-accent: #50443D;
+  --color-bg-dark: #332F2C;   
+  --color-text-white: #F8F9FA; 
+  --color-text-muted: #E9ECEF;
+  --color-dark-brown: #3d3835; 
+}
+
+@layer base {
+  body {
+
+    background-color: #332F2C !important; 
+    color: #F8F9FA !important;
+    padding-top: 80px;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3 {
+    color: var(--color-text-white);
+    letter-spacing: -0.02em;
+    @apply font-bold;
+  }
+}
+
+@layer components {
+  /* Твоя головна кнопка без змін у візуалі */
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-text-white);
+    @apply border-none font-bold cursor-pointer uppercase tracking-widest transition-colors duration-300 flex items-center justify-center gap-2;
+    padding: 12px 20px;
+    border-radius: 4px;
+    min-width: 48px; 
+    min-height: 48px;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-secondary);
+  }
+
+  /* Твоя картка з Index/Show */
+  .item-card-custom {
+    background-color: #2b2724; /* колір зі скриншоту */
+    @apply p-5 rounded-lg border transition-all duration-300 flex flex-col;
+    border-color: var(--color-dark-accent);
+  }
+
+  .item-card-custom:hover {
+    @apply -translate-y-1;
+    border-color: var(--color-primary);
+  }
+
+  /* Твій Navigation Link */
+  .nav-link-custom {
+    color: var(--color-text-white);
+    @apply no-underline font-medium transition-colors duration-300 flex items-center gap-2;
+  }
+
+  .nav-link-custom:hover {
+    color: var(--color-primary);
+  }
+}

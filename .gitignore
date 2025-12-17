@@ -39,3 +39,5 @@
 /tmp/cache/bootsnap/compile-cache-iseq/*
 
 .env
+/app/assets/builds/*
+!/app/assets/builds/.keep

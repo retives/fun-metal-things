@@ -25,8 +25,9 @@ class Admin::ItemsController < Admin::BaseController
   end
 
   def update
+    @item = Item.find(params[:id])
     if @item.update(item_params)
-      redirect_to admin_items_path, notice: "Товар оновлено! 🤘"
+      redirect_to admin_items_path, notice: "Товар оновлено!"
     else
       render :edit, status: :unprocessable_entity
     end

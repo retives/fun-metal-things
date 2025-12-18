@@ -1,7 +1,6 @@
 <div class="max-w-4xl mx-auto">
   <div class="bg-stone-900 p-6 md:p-10 rounded-2xl border border-stone-800 shadow-2xl">
-    <%= form_with(model: [:admin, item], local: true, class: "space-y-8") do |f| %>
-      
+      <%= form_with(model: [:admin, item], local: true, html: { multipart: true, class: "space-y-8" }) do |f| %>      
       <%# БЛОК ПОМИЛОК %>
       <% if item.errors.any? %>
         <div class="bg-red-900/20 border-l-4 border-red-500 p-5 rounded-r-xl animate-shake">
@@ -20,10 +19,16 @@
           ФОТО ТОВАРУ 📸
         <% end %>
         
-        <div class="flex flex-col md:flex-row items-center gap-6 p-4 bg-stone-800/50 rounded-xl border border-dashed border-stone-700">
-          <% if item.image.attached? %>
+          <% if item.image.attached? && item.persisted? %>
             <div class="shrink-0">
-              <%= image_tag item.image.variant(resize_to_limit: [150, 150]), class: "rounded-lg border-2 border-primary shadow-lg shadow-primary/20" %>
+              <%= image_tag item.image.variant(resize_to_limit: [150, 150]), 
+                  class: "rounded-lg border-2 border-primary shadow-lg shadow-primary/20" %>
+            </div>
+          <% elsif item.image.attached? %>
+            <div class="shrink-0 flex flex-col items-center gap-2">
+              <div class="w-32 h-32 bg-stone-800 rounded-lg border-2 border-primary flex items-center justify-center text-xs text-center p-2 text-stone-300">
+                Фото готове до завантаження 📥
+              </div>
             </div>
           <% else %>
             <div class="w-32 h-32 bg-stone-900 rounded-lg border-2 border-stone-800 flex items-center justify-center text-4xl grayscale opacity-30">
@@ -80,7 +85,6 @@
         </div>
       </div>
 
-      <%# КНОПКИ ДІЇ %>
       <div class="flex flex-col sm:flex-row gap-4 pt-8 border-t border-stone-800">
         <%= f.submit item.new_record? ? "СТВОРИТИ ТОВАР 🤘" : "ОНОВИТИ ТОВАР ✨", 
             class: "btn-primary flex-[2] !py-4 text-base md:text-lg tracking-widest cursor-pointer shadow-xl" %>

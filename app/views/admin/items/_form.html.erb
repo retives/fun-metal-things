@@ -1,7 +1,6 @@
 <div class="max-w-4xl mx-auto">
   <div class="bg-stone-900 p-6 md:p-10 rounded-2xl border border-stone-800 shadow-2xl">
       <%= form_with(model: [:admin, item], local: true, html: { multipart: true, class: "space-y-8" }) do |f| %>      
-      <%# БЛОК ПОМИЛОК %>
       <% if item.errors.any? %>
         <div class="bg-red-900/20 border-l-4 border-red-500 p-5 rounded-r-xl animate-shake">
           <h4 class="text-red-500 font-black uppercase text-sm mb-2">Помилки при збереженні:</h4>
@@ -13,7 +12,6 @@
         </div>
       <% end %>
 
-      <%# ЗАВАНТАЖЕННЯ ФОТО %>
       <div class="space-y-4">
         <%= f.label :image, class: "block text-primary font-black uppercase tracking-widest text-xs mb-2" do %>
           ФОТО ТОВАРУ 📸

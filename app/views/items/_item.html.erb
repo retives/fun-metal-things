@@ -1,20 +1,24 @@
-<div class="group bg-stone-900 rounded-2xl border border-stone-800 overflow-hidden hover:border-primary/50 transition-all hover:shadow-2xl hover:shadow-primary/5 flex flex-col">
-  <%# Зображення %>
-  <div class="relative h-48 bg-stone-950 flex items-center justify-center p-4 overflow-hidden">
+<div class="group bg-stone-900 rounded-2xl border border-stone-800 overflow-hidden hover:border-primary/50 transition-all hover:shadow-2xl hover:shadow-primary/5 flex flex-col h-full">
+  <%# Контейнер зображення з фіксованою висотою %>
+  <div class="relative h-64 bg-stone-950 overflow-hidden">
     <% if item.image.attached? %>
-      <%= image_tag item.image, class: "max-h-full w-auto object-contain group-hover:scale-110 transition-transform duration-500" %>
+      <%# object-cover розтягує фото на всю площу без деформації, а h-full w-full заповнює блок %>
+      <%= image_tag item.image, class: "h-full w-full object-cover object-center group-hover:scale-110 transition-transform duration-500" %>
     <% else %>
-      <span class="text-4xl opacity-20">🎸</span>
+      <div class="h-full w-full flex items-center justify-center bg-stone-900">
+        <span class="text-5xl opacity-20">🎸</span>
+      </div>
     <% end %>
     
-    <div class="absolute top-3 right-3 bg-stone-900/80 backdrop-blur-sm px-3 py-1 rounded-full border border-stone-700 text-xs text-stone-300 font-mono">
+    <%# Цінник поверх зображення %>
+    <div class="absolute top-3 right-3 bg-stone-900/90 backdrop-blur-md px-3 py-1 rounded-full border border-stone-700 text-xs text-primary font-black shadow-lg">
       <%= number_to_currency(item.price, unit: "₴", format: "%n %u") %>
     </div>
   </div>
 
   <%# Опис %>
   <div class="p-5 flex flex-col flex-1">
-    <h3 class="text-white font-bold text-lg mb-2 group-hover:text-primary transition-colors">
+    <h3 class="text-white font-bold text-lg mb-2 group-hover:text-primary transition-colors line-clamp-1">
       <%= link_to item.name, item %>
     </h3>
     
@@ -23,10 +27,14 @@
     </p>
 
     <div class="flex items-center justify-between mt-auto pt-4 border-t border-stone-800">
-       <span class="text-[10px] uppercase tracking-tighter text-stone-600 font-bold">
-         <%= item.tags.first&.name || "Instrument" %>
-       </span>
-       <%= link_to "Детальніше", item, class: "text-xs font-bold text-primary hover:underline" %>
+       <div class="flex gap-2">
+         <span class="px-2 py-0.5 bg-stone-800 rounded text-[9px] uppercase tracking-widest text-stone-400 font-black border border-stone-700">
+           <%= item.tags.first&.name || "Instrument" %>
+         </span>
+       </div>
+       <%= link_to item, class: "p-2 bg-stone-800 rounded-lg hover:bg-primary group/btn transition-all" do %>
+         <span class="text-[10px] font-black uppercase text-stone-300 group-hover/btn:text-white">Деталі →</span>
+       <% end %>
     </div>
   </div>
 </div>

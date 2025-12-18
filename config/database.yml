@@ -16,7 +16,7 @@ development:
   database: fun_metal_things_development
   pool: 5
   username: postgres
-  password: 2-Bev45rt # Замініть на пароль, який ви встановлювали для PostgreSQL
+  password: 2-Bev45rt 
   host: localhost
 
 # Warning: The database defined as "test" will be erased and
@@ -29,7 +29,7 @@ test:
   database: fun_metal_things_development
   pool: 5
   username: postgres
-  password: 2-Bev45rt # Замініть на пароль, який ви встановлювали для PostgreSQL
+  password: 2-Bev45rt 
   host: localhost
 
 

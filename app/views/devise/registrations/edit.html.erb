@@ -1,53 +1,85 @@
-<div class="content-wrapper" style="max-width: 500px; margin: 0 auto;">
-  <div class="profile-header" style="margin-bottom: 30px; border-bottom: 2px solid var(--primary);">
-    <h1>Налаштування входу 🛡️</h1>
+<div class="max-w-xl mx-auto px-4 py-12">
+  <%# ЗАГОЛОВОК СТОРІНКИ %>
+  <div class="mb-8 border-b-2 border-primary pb-4 flex items-center justify-between">
+    <h1 class="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter">
+      Налаштування входу <span class="text-primary">🛡️</span>
+    </h1>
+    <%= link_to "← Назад", profile_path, class: "text-[10px] font-bold text-stone-500 hover:text-white uppercase tracking-widest transition-colors" %>
   </div>
 
-  <div class="item-card" style="padding: 30px;">
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
+  <div class="bg-stone-900 rounded-3xl border border-stone-800 shadow-2xl overflow-hidden">
+    <div class="p-6 md:p-10">
+      
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "space-y-6" }) do |f| %>
+        
+        <%# ПОМИЛКИ %>
+        <% if resource.errors.any? %>
+          <div class="bg-red-900/20 border-l-4 border-red-500 p-4 rounded-r-xl">
+            <ul class="text-xs text-red-400 font-bold uppercase space-y-1">
+              <% resource.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
 
-      <div class="form-group" style="margin-bottom: 20px;">
-        <%= f.label :email, "Електронна пошта", style: "display: block; margin-bottom: 8px; color: var(--primary);" %>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", style: "width: 100%; background: #2b2724; border: 1px solid var(--muted); color: white; padding: 12px; border-radius: 6px;" %>
-      </div>
+        <%# EMAIL %>
+        <div class="space-y-2">
+          <%= f.label :email, "Електронна пошта", class: "admin-form-label" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "admin-form-input" %>
+          
+          <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+            <p class="text-[10px] text-amber-500 font-bold uppercase animate-pulse">
+              Очікується підтвердження для: <%= resource.unconfirmed_email %>
+            </p>
+          <% end %>
+        </div>
 
-      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-        <div style="color: var(--muted); font-size: 0.8rem; margin-bottom: 10px;">
-          Очікується підтвердження для: <%= resource.unconfirmed_email %>
+        <%# ПАРОЛІ %>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-stone-800">
+          <div class="space-y-2">
+            <%= f.label :password, class: "admin-form-label" do %>
+              Новий пароль <span class="text-[9px] text-stone-600 font-normal normal-case block italic">(залиште порожнім, якщо не змінюєте)</span>
+            <% end %>
+            <%= f.password_field :password, autocomplete: "new-password", class: "admin-form-input", placeholder: "••••••••" %>
+          </div>
+
+          <div class="space-y-2">
+            <%= f.label :password_confirmation, "Підтвердження", class: "admin-form-label" %>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "admin-form-input", placeholder: "••••••••" %>
+          </div>
+        </div>
+
+        <%# ПІДТВЕРДЖЕННЯ ПОТОЧНИМ ПАРОЛЕМ %>
+        <div class="bg-stone-950 p-6 rounded-2xl border-2 border-primary/30 mt-8 space-y-3">
+          <div class="flex items-center gap-3">
+            <span class="text-xl">🔑</span>
+            <%= f.label :current_password, class: "admin-form-label !mb-0" do %>
+              Поточний пароль <span class="text-[9px] text-primary/70 block normal-case font-normal italic">необхідний для збереження будь-яких змін</span>
+            <% end %>
+          </div>
+          <%= f.password_field :current_password, autocomplete: "current-password", 
+              class: "admin-form-input !border-primary/50 focus:!border-primary shadow-[0_0_15px_rgba(207,109,55,0.1)]", 
+              placeholder: "Введіть пароль для підтвердження" %>
+        </div>
+
+        <div class="pt-4">
+          <%= f.submit "Оновити акаунт 🤘", class: "btn-primary w-full !py-4 text-base font-black tracking-widest shadow-xl cursor-pointer active:scale-95 transition-transform" %>
         </div>
       <% end %>
 
-      <div class="form-group" style="margin-bottom: 20px;">
-        <%= f.label :password, "Новий пароль", style: "display: block; margin-bottom: 5px; color: var(--primary);" %>
-        <i style="font-size: 0.7rem; color: var(--muted); display: block; margin-bottom: 8px;">(залиште порожнім, якщо не хочете змінювати)</i>
-        <%= f.password_field :password, autocomplete: "new-password", class: "form-control", style: "width: 100%; background: #2b2724; border: 1px solid var(--muted); color: white; padding: 12px; border-radius: 6px;" %>
-      </div>
-
-      <div class="form-group" style="margin-bottom: 20px;">
-        <%= f.label :password_confirmation, "Підтвердження нового пароля", style: "display: block; margin-bottom: 8px; color: var(--primary);" %>
-        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", style: "width: 100%; background: #2b2724; border: 1px solid var(--muted); color: white; padding: 12px; border-radius: 6px;" %>
-      </div>
-
-      <div class="form-group" style="margin-bottom: 30px; border-top: 1px solid var(--dark-brown); padding-top: 20px;">
-        <%= f.label :current_password, "Поточний пароль", style: "display: block; margin-bottom: 5px; color: var(--primary);" %>
-        <i style="font-size: 0.7rem; color: var(--muted); display: block; margin-bottom: 8px;">(нам потрібен ваш пароль, щоб підтвердити зміни)</i>
-        <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control", style: "width: 100%; background: #2b2724; border: 2px solid var(--primary); color: white; padding: 12px; border-radius: 6px;" %>
-      </div>
-
-      <div class="actions">
-        <%= f.submit "Оновити акаунт", class: "btn-primary", style: "width: 100%;" %>
-      </div>
-    <% end %>
+    </div>
   </div>
 
-  <div style="margin-top: 40px; border: 1px dashed #ff4500; padding: 20px; border-radius: 8px; text-align: center;">
-    <h3 style="color: #ff4500; margin-top: 0;">Видалити акаунт</h3>
-    <p style="font-size: 0.8rem; color: var(--muted);">Це дія незворотна. Всі ваші замовлення будуть анонімізовані.</p>
-    <%= button_to "Видалити мій акаунт", registration_path(resource_name), data: { confirm: "Ви впевнені?", turbo_confirm: "Ви впевнені?" }, method: :delete, class: "btn-outline", style: "color: #ff4500; border-color: #ff4500;" %>
-  </div>
-
-  <div style="margin-top: 20px; text-align: center;">
-    <%= link_to "← Назад до профілю", profile_path, style: "color: var(--muted);" %>
+  <%# НЕБЕЗПЕЧНА ЗОНА %>
+  <div class="mt-12 p-8 border-2 border-dashed border-red-900/50 rounded-3xl bg-red-900/5 text-center space-y-4">
+    <h3 class="text-red-500 font-black uppercase tracking-widest text-sm">Видалити акаунт</h3>
+    <p class="text-stone-500 text-xs leading-relaxed max-w-xs mx-auto">
+      Це дія незворотна. Всі ваші замовлення будуть анонімізовані, а дані видалені.
+    </p>
+    <%= button_to "Видалити мій акаунт", registration_path(resource_name), 
+        data: { turbo_confirm: "Ви впевнені? Це неможливо буде скасувати!" }, 
+        method: :delete, 
+        class: "text-red-500 hover:text-red-400 font-black text-[10px] uppercase tracking-widest border-b border-red-900/50 pb-1 hover:border-red-400 transition-all" %>
   </div>
 </div>

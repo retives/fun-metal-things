@@ -1,32 +1,51 @@
-<div class="auth-wrapper">
-  <div class="item-card auth-card card--top-accent">
-    <h2 class="auth-title">ВХІД У КАБІНЕТ 🤘</h2>
+<div class="min-h-[80vh] flex items-center justify-center px-4 py-12">
+  <div class="w-full max-w-md bg-stone-900 rounded-3xl border border-stone-800 shadow-2xl overflow-hidden relative">
+    
+    <%# Декоративний акцент зверху %>
+    <div class="h-2 w-full bg-primary shadow-[0_0_20px_rgba(207,109,55,0.5)]"></div>
 
-    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-      <div class="form-group form-row">
-        <%= f.label :email, "Електронна пошта", class: "form-label" %>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
-      </div>
+    <div class="p-8 md:p-10">
+      <header class="text-center mb-10">
+        <h2 class="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter mb-2">
+          ВХІД У КАБІНЕТ <span class="text-primary">🤘</span>
+        </h2>
+        <p class="text-stone-500 text-xs uppercase tracking-widest font-bold">Вітаємо у FunMetalThings</p>
+      </header>
 
-      <div class="form-group form-row">
-        <%= f.label :password, "Пароль", class: "form-label" %>
-        <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
-      </div>
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-6" }) do |f| %>
+        
+        <div class="space-y-2">
+          <%= f.label :email, "Електронна пошта", class: "admin-form-label !mb-0" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", 
+              class: "admin-form-input text-center md:text-left", 
+              placeholder: "metal@example.com" %>
+        </div>
 
-      <% if devise_mapping.rememberable? %>
-        <div class="form-remember">
-          <%= f.check_box :remember_me %>
-          <%= f.label :remember_me, "Запам'ятати мене", class: "muted" %>
+        <div class="space-y-2">
+          <%= f.label :password, "Пароль", class: "admin-form-label !mb-0" %>
+          <%= f.password_field :password, autocomplete: "current-password", 
+              class: "admin-form-input text-center md:text-left", 
+              placeholder: "••••••••" %>
+        </div>
+
+        <% if devise_mapping.rememberable? %>
+          <div class="flex items-center gap-3 py-2 cursor-pointer group">
+            <%= f.check_box :remember_me, class: "w-4 h-4 rounded border-stone-700 bg-stone-800 text-primary focus:ring-primary focus:ring-offset-stone-900" %>
+            <%= f.label :remember_me, "Запам'ятати мене", class: "text-xs font-bold text-stone-500 group-hover:text-stone-300 transition-colors cursor-pointer" %>
+          </div>
+        <% end %>
+
+        <div class="pt-4">
+          <%= f.submit "УВІЙТИ", class: "btn-primary w-full !py-4 text-base font-black tracking-[0.2em] shadow-lg shadow-primary/20 cursor-pointer active:scale-95 transition-transform" %>
         </div>
       <% end %>
 
-      <div class="actions">
-        <%= f.submit "УВІЙТИ", class: "btn-primary btn-block" %>
+      <div class="mt-8 pt-8 border-t border-stone-800 text-center space-y-3">
+        <%# Стилізація посилань Devise (Реєстрація, Забули пароль тощо) %>
+        <div class="devise-links text-[10px] md:text-xs font-bold uppercase tracking-widest text-stone-500 hover:text-primary transition-colors">
+          <%= render "devise/shared/links" %>
+        </div>
       </div>
-    <% end %>
-
-    <div class="auth-footer">
-      <%= render "devise/shared/links" %>
     </div>
   </div>
 </div>

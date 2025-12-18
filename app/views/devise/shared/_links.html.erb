@@ -1,25 +1,50 @@
-<%- if controller_name != 'sessions' %>
-  <%= link_to "Log in", new_session_path(resource_name) %><br />
-<% end %>
-
-<%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-  <%= link_to "Sign up", new_registration_path(resource_name) %><br />
-<% end %>
-
-<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-  <%= link_to "Forgot your password?", new_password_path(resource_name) %><br />
-<% end %>
-
-<%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
-  <%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name) %><br />
-<% end %>
-
-<%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
-  <%= link_to "Didn't receive unlock instructions?", new_unlock_path(resource_name) %><br />
-<% end %>
-
-<%- if devise_mapping.omniauthable? %>
-  <%- resource_class.omniauth_providers.each do |provider| %>
-    <%= button_to "Sign in with #{OmniAuth::Utils.camelize(provider)}", omniauth_authorize_path(resource_name, provider), data: { turbo: false } %><br />
+<div class="flex flex-col gap-3 mt-6">
+  <%- if controller_name != 'sessions' %>
+    <%= link_to new_session_path(resource_name), 
+        class: "text-[11px] font-black uppercase tracking-[0.2em] text-stone-500 hover:text-primary transition-colors flex items-center justify-center gap-2" do %>
+      <span>Вже є акаунт?</span>
+      <span class="text-white border-b border-white/20 hover:border-primary transition-colors">Увійти</span>
+    <% end %>
   <% end %>
-<% end %>
+
+  <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+    <%= link_to new_registration_path(resource_name), 
+        class: "text-[11px] font-black uppercase tracking-[0.2em] text-stone-500 hover:text-primary transition-colors flex items-center justify-center gap-2" do %>
+      <span>Немає акаунта?</span>
+      <span class="text-white border-b border-white/20 hover:border-primary transition-colors">Реєстрація</span>
+    <% end %>
+  <% end %>
+
+  <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+    <%= link_to "Забули пароль?", new_password_path(resource_name), 
+        class: "text-[10px] font-bold uppercase tracking-widest text-stone-600 hover:text-stone-300 transition-colors" %>
+  <% end %>
+
+  <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+    <%= link_to "Не отримали лист підтвердження?", new_confirmation_path(resource_name), 
+        class: "text-[9px] font-bold uppercase tracking-tighter text-stone-600 hover:text-amber-500 transition-colors" %>
+  <% end %>
+
+  <%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
+    <%= link_to "Не отримали інструкції для розблокування?", new_unlock_path(resource_name), 
+        class: "text-[9px] font-bold uppercase tracking-tighter text-stone-600 hover:text-red-500 transition-colors" %>
+  <% end %>
+
+  <%- if devise_mapping.omniauthable? %>
+    <div class="relative py-4 flex items-center justify-center">
+      <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-stone-800"></div></div>
+      <span class="relative px-3 bg-stone-900 text-[9px] font-black text-stone-600 uppercase tracking-widest">Або через соцмережі</span>
+    </div>
+    
+    <div class="grid grid-cols-1 gap-3">
+      <%- resource_class.omniauth_providers.each do |provider| %>
+        <%= button_to omniauth_authorize_path(resource_name, provider), 
+            data: { turbo: false }, 
+            class: "w-full py-3 px-4 bg-stone-800 hover:bg-stone-700 border border-stone-700 rounded-xl text-xs font-bold text-white transition-all flex items-center justify-center gap-3 active:scale-[0.98]" do %>
+          <%# Можна додати іконку залежно від провайдера %>
+          <span>Продовжити через <%= OmniAuth::Utils.camelize(provider) %></span>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

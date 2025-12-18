@@ -1,62 +1,42 @@
-<div class="page-header">
-  <h1>ІНВЕНТАР ТОВАРІВ 🎸</h1>
-  <div class="page-actions">
-    <%= link_to "ДОДАТИ НОВИЙ ТОВАР +", new_admin_item_path, class: "btn-primary" %>
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <%# Хедер залишаємо як був %>
+  <div class="flex justify-between items-center mb-8 border-b border-stone-800 pb-6">
+    <h1 class="text-3xl font-black text-white uppercase">ІНВЕНТАР 🎸</h1>
+    <%= link_to "ДОДАТИ ТОВАР +", new_admin_item_path, class: "bg-primary text-white px-6 py-3 rounded-xl font-bold hover:brightness-110" %>
   </div>
-</div>
 
-<div class="item-card item-card--flush item-card--dark">
-  <table class="table--full">
-    <thead>
-      <tr>
-        <th>Товар</th>
-        <th>Ціна</th>
-        <th>Кількість</th>
-        <th>Статус</th>
-        <th style="text-align: center;">Дії</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @items.each do |item| %>
-        <tr class="table-row">
-          <td>
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <span style="font-size: 1.2rem;">🎸</span>
-              <div>
-                <div style="font-weight: bold;"><%= item.name %></div>
-                <small class="muted"><%= item.id.to_s.first(8) %></small>
-              </div>
-            </div>
-          </td>
-          <td><%= number_to_currency(item.price, unit: "₴") %></td>
-          <td>
-            <span class="<%= 'low-stock' if item.quantity < 3 %>">
-              <%= item.quantity %> шт.
-            </span>
-          </td>
-          <td>
-            <% if item.quantity > 0 %>
-              <span class="status-available">● В продажу</span>
-            <% else %>
-              <span class="status-unavailable">● Немає</span>
-            <% end %>
-          </td>
-          <td style="text-align: center;">
-            <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
-
-              <%= link_to "✏️", edit_admin_item_path(item), title: "Редагувати", class: "", style: "font-size: 1.2rem; text-decoration: none;" %>
-
-              <%= button_to admin_item_path(item), 
-                  method: :delete, 
-                  form: { data: { turbo_confirm: "Ви впевнені? Це видалить товар назавжди!" } }, 
-                  style: "background: none; border: none; cursor: pointer; color: #ff4500; font-size: 1.2rem;",
-                  title: "Видалити" do %>
-                🗑️
-              <% end %>
-            </div>
-          </td>
+  <%# Таблиця без приховування для тестів %>
+  <div class="bg-stone-900 rounded-2xl border border-stone-800 overflow-x-auto">
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="text-stone-500 text-[10px] uppercase tracking-widest bg-stone-800/50">
+          <th class="p-4">Товар</th>
+          <th class="p-4">Ціна</th>
+          <th class="p-4 text-center">Дії</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody class="divide-y divide-stone-800">
+        <% if @items.any? %>
+          <% @items.each do |item| %>
+            <tr class="hover:bg-stone-800/30 transition-colors">
+              <td class="p-4 font-bold"><%= item.name %></td>
+              <td class="p-4 text-primary font-mono"><%= number_to_currency(item.price, unit: "₴") %></td>
+              <td class="p-4">
+                <div class="flex justify-center gap-4">
+                  <%= link_to "✏️", edit_admin_item_path(item) %>
+                  <%= button_to "🗑️", admin_item_path(item), method: :delete, data: { turbo_confirm: "Видалити?" } %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="3" class="p-20 text-center text-stone-500 italic">
+              Список товарів порожній (Перевір змінну @items у контролері)
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
